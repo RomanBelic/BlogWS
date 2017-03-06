@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class BlogWebServiceApplication {
 	//test
 	// Commit from Chris
+    //Second commit from Chris
 	public static void main(String[] args) {
 		SpringApplication.run(BlogWebServiceApplication.class, args);
 	}

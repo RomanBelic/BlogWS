@@ -9,6 +9,7 @@ public class BlogWebServiceApplication {
 	//Commit from Chris
     //Second commit from Chris
     //Commit de Roman
+
 	public static void main(String[] args) {
 		SpringApplication.run(BlogWebServiceApplication.class, args);
 	}

@@ -1,7 +1,6 @@
 package com.esgi.al1.blogws.models;
 
-import com.sun.org.apache.xpath.internal.operations.Equals;
-
+import javax.websocket.Decoder;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -16,6 +15,27 @@ public class Post implements Serializable {
      private String title;
      private String description;
      private String tags;
+     private byte[] binaryContent;
+     private String text;
+
+     public Post (){
+     }
+
+    public byte[] getBinaryContent() {
+        return binaryContent;
+    }
+
+    public void setBinaryContent(byte[] binaryContent) {
+        this.binaryContent = binaryContent;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
 
     public Date getDate() {
         return date;

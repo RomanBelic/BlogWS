@@ -9,6 +9,7 @@ import com.esgi.al1.blogws.models.WebModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -28,6 +29,21 @@ public class PostControllerService implements IPostControllerService {
     @Override
     public List<Post> getAllPosts() {
         return postRepository.getAll();
+    }
+
+    @Override
+    public Post getPost(int id) {
+        return null;
+    }
+
+    @Override
+    public List<Post> getAllPost(int start, int end) {
+        return null;
+    }
+
+    @Override
+    public int updatePost(HashMap<String, Object> sqlParams, int id) {
+        return 0;
     }
 
 }

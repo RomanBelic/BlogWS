@@ -1,11 +1,9 @@
 package com.esgi.al1.blogws.services;
 
-import com.esgi.al1.blogws.controllers.Mapping;
-import com.esgi.al1.blogws.dao.PostDAO;
+import com.esgi.al1.blogws.dao.PostRepository;
 import com.esgi.al1.blogws.interfaces.IPostControllerService;
 import com.esgi.al1.blogws.interfaces.IPostRepository;
 import com.esgi.al1.blogws.models.Post;
-import com.esgi.al1.blogws.models.WebModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +20,7 @@ public class PostControllerService implements IPostControllerService {
     private final IPostRepository postRepository;
 
     @Autowired
-    public PostControllerService(PostDAO postRepository) {
+    public PostControllerService(PostRepository postRepository) {
         this.postRepository = postRepository;
     }
 

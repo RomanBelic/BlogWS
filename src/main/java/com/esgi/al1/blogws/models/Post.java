@@ -131,7 +131,7 @@ public class Post implements Serializable {
              return this;
          }
 
-         public PostBuilder tag (String tag){
+         public PostBuilder tags (String tags){
              this.tags=tags;
              return this;
          }

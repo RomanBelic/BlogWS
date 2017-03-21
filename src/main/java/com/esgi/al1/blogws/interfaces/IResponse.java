@@ -7,7 +7,7 @@ import com.esgi.al1.blogws.models.WebModel;
  */
 public interface IResponse<T> {
 
-    T getResponseBody();
+    T getResponse();
 
     interface IWebModelResponse <T>{
         WebModel<T> convertResponse (IResponse<T> response);

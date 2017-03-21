@@ -15,12 +15,13 @@ import java.sql.SQLException;
 public class MySqlConnector {
 
     public static Connection getNewConnection () throws SQLException{
-        Connection cn = null;
+        Connection cn;
         try {
              cn = DriverManager.getConnection("jdbc:mysql://localhost:3306?user=root&password=&convertToNull&autoReconnect=true&characterEncoding=UTF-8&characterSetResults=UTF-8&allowMultiQueries=true&useSSL=false");
         }
         catch (SQLException e){
             Log.err("MySqlConnector : " + e.getMessage());
+            throw e;
         }
         return cn;
     }

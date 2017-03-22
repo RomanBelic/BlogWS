@@ -17,6 +17,16 @@ public class WebModel<T> implements Serializable {
         this.apiTag = apiTag;
     }
 
+    private String action;
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
+
     private T content;
 
     public T getContent() {
@@ -24,11 +34,6 @@ public class WebModel<T> implements Serializable {
     }
 
     public void setContent(T content) {
-        this.content = content;
-    }
-
-    public WebModel(String apiTag, T content){
-        this.apiTag = apiTag;
         this.content = content;
     }
 }

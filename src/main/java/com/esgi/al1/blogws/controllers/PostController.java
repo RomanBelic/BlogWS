@@ -1,5 +1,6 @@
 package com.esgi.al1.blogws.controllers;
 import com.esgi.al1.blogws.controllers.Mapping.APITags;
+import com.esgi.al1.blogws.controllers.Mapping.APIActions;
 import com.esgi.al1.blogws.interfaces.IResponse;
 import com.esgi.al1.blogws.interfaces.IResponse.IWebModelResponse;
 import com.esgi.al1.blogws.interfaces.IPostControllerService;
@@ -8,6 +9,7 @@ import com.esgi.al1.blogws.models.WebModel;
 import com.esgi.al1.blogws.services.PostControllerService;
 import com.esgi.al1.blogws.utils.Log;
 import com.esgi.al1.blogws.utils.PostTable;
+import com.esgi.al1.blogws.utils.WebModelBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
@@ -31,42 +33,54 @@ public class PostController {
                 this.postControllerService = postControllerService;
         }
 
-        @RequestMapping (value = Mapping.PostsLimit, method = RequestMethod.GET)
+        @RequestMapping (value = Mapping.AllPosts + "/{start}/{end}", method = RequestMethod.GET)
         public @ResponseBody
         WebModel<List<Post>>
         getAllPosts (@PathVariable(required = true) int start,@PathVariable(required = true) int end){
                 IResponse<List<Post>> resp = () -> postControllerService.getAllPost(start, end);
-                IWebModelResponse<List<Post>> wm = (IResponse<List<Post>> response) ->
-                        new WebModel<>(APITags.PostAPITag, response.getResponse());
+                IWebModelResponse<List<Post>> converter = (IResponse<List<Post>> response) ->
+                         new WebModelBuilder<List<Post>>().
+                                buildAPITag(APITags.PostAPITag).
+                                buildAPIAction(APIActions.getPosts).
+                                buildContent(resp.getResponse()).
+                                build();
                 Log.i("getting limited posts");
-                return wm.convertResponse(resp);
+                return converter.convertResponse(resp);
         }
 
-        @RequestMapping (value = Mapping.FindPost, method = RequestMethod.GET)
+        @RequestMapping (value =  Mapping.FindPost, method = RequestMethod.GET)
         public @ResponseBody
         WebModel<Post>
         getPostById (@PathVariable(required = true) int id){
                 IResponse<Post> resp = () -> postControllerService.getPost(id);
                 IWebModelResponse<Post> wm = (IResponse<Post> response) ->
-                        new WebModel<>(APITags.PostAPITag, response.getResponse());
+                        new WebModelBuilder<Post>().
+                                buildAPITag(APITags.PostAPITag).
+                                buildAPIAction(APIActions.getPosts).
+                                buildContent(resp.getResponse()).
+                                build();
                 Log.i("getting limited posts");
                 return wm.convertResponse(resp);
         }
 
-        @RequestMapping (value = Mapping.AllPosts, method = RequestMethod.GET)
+        @RequestMapping (value =  Mapping.AllPosts, method = RequestMethod.GET)
         public @ResponseBody
         WebModel<List<Post>>
         getAllPosts (){
                 IResponse<List<Post>> resp = postControllerService::getAllPosts;
                 IWebModelResponse<List<Post>> wm = (IResponse<List<Post>> response) ->
-                        new WebModel<>(APITags.PostAPITag, response.getResponse());
+                        new WebModelBuilder<List<Post>>().
+                                buildAPITag(APITags.PostAPITag).
+                                buildAPIAction(APIActions.getPosts).
+                                buildContent(resp.getResponse()).
+                                build();
                 Log.i("getting all posts");
                 return wm.convertResponse(resp);
         }
 
-        @RequestMapping (value = Mapping.UpdatePost, method = RequestMethod.PUT)
-        public @ResponseStatus
-        int
+        @RequestMapping (value =  Mapping.UpdatePost , method = RequestMethod.PUT)
+        public @ResponseBody
+        WebModel<Integer>
         updatePost (@PathVariable(required = true) int id,
                     @RequestParam(value = "Text", required = false) String text,
                     @RequestParam(value = "Description", required = false) String desc,
@@ -84,22 +98,34 @@ public class PostController {
                 if (title != null) sqlParams.put(PostTable.Columns.Title.getName(), title);
 
                 IResponse<Integer> resp = () -> postControllerService.updatePost(sqlParams, id);
+                IWebModelResponse<Integer> wm = (IResponse<Integer> response) ->
+                        new WebModelBuilder<Integer>().
+                                buildAPITag(APITags.PostAPITag).
+                                buildAPIAction(APIActions.updatePost).
+                                buildContent(resp.getResponse()).
+                                build();
                 Log.i("updating post");
-                return resp.getResponse();
+                return wm.convertResponse(resp);
         }
 
-        @RequestMapping (value = Mapping.DeletePost, method = RequestMethod.DELETE)
-        public @ResponseStatus
-        int
+        @RequestMapping (value =  Mapping.DeletePost , method = RequestMethod.DELETE)
+        public @ResponseBody
+        WebModel<Integer>
         deletePost (@PathVariable(required = true) int id) {
                 IResponse<Integer> resp = () -> postControllerService.deletePost(id);
+                IWebModelResponse<Integer> wm = (IResponse<Integer> response) ->
+                        new WebModelBuilder<Integer>().
+                                buildAPITag(APITags.PostAPITag).
+                                buildAPIAction(APIActions.deletePost).
+                                buildContent(resp.getResponse()).
+                                build();
                 Log.i("deleteting post");
-                return resp.getResponse();
+                return wm.convertResponse(resp);
         }
 
         @RequestMapping (value = Mapping.InsertPost, method = RequestMethod.POST)
-        public @ResponseStatus
-        int
+        public @ResponseBody
+        WebModel<Integer>
         insertPost (@RequestParam(value = "Text", required = false) String text,
                     @RequestParam(value = "Description", required = false) String desc,
                     @RequestParam(value = "AuthorID", required = false) Integer authorId,
@@ -116,8 +142,14 @@ public class PostController {
                 if (title != null) sqlParams.put(PostTable.Columns.Title.getName(), title);
 
                 IResponse<Integer> resp = () -> postControllerService.insertPost(sqlParams);
+                IWebModelResponse<Integer> wm = (IResponse<Integer> response) ->
+                        new WebModelBuilder<Integer>().
+                                buildAPITag(APITags.PostAPITag).
+                                buildAPIAction(APIActions.insertPost).
+                                buildContent(resp.getResponse()).
+                                build();
                 Log.i("inserting post");
-                return resp.getResponse();
+                return wm.convertResponse(resp);
         }
 
 }

@@ -18,8 +18,7 @@ public class Post implements Serializable {
      private byte[] binaryContent;
      private String text;
 
-     public Post (){
-     }
+     public Post (){}
 
     public byte[] getBinaryContent() {
         return binaryContent;
@@ -85,15 +84,6 @@ public class Post implements Serializable {
         this.tags = tags;
     }
 
-    private Post(PostBuilder builder) {
-        this.date = builder.date;
-        this.id = builder.id;
-        this.authorId = builder.authorId;
-        this.title = builder.title;
-        this.description = builder.description;
-        this.tags = builder.tags;
-    }
-
     @Override
     public int hashCode() {
         return new Integer(id).hashCode() + new Integer(authorId).hashCode();
@@ -102,42 +92,5 @@ public class Post implements Serializable {
     @Override
     public boolean equals(Object obj) {
         return (obj instanceof Post && ((Post)obj).id == this.id);
-    }
-
-    public static class PostBuilder {
-         private final int id;
-         private final int authorId;
-         private Date date;
-         private String title;
-         private String description;
-         private String tags;
-
-         public PostBuilder(int id, int authorId){
-             this.id=id;
-             this.authorId=authorId;
-         }
-         public PostBuilder date(Date date){
-             this.date=date;
-             return this;
-         }
-
-         public PostBuilder title (String title){
-             this.title=title;
-             return this;
-         }
-
-         public PostBuilder description (String desc){
-             this.description=desc;
-             return this;
-         }
-
-         public PostBuilder tags (String tags){
-             this.tags=tags;
-             return this;
-         }
-
-         public Post build(){
-             return new Post(this);
-         }
     }
 }

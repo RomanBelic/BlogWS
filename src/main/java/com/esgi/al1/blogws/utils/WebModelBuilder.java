@@ -7,10 +7,10 @@ import com.esgi.al1.blogws.models.WebModel;
  */
 public class WebModelBuilder<T> {
 
-    public WebModel<T> model;
+    private final WebModel<T> model;
 
     public WebModelBuilder(){
-        model = new WebModel<T>();
+        model = new WebModel<>();
     }
 
     public WebModelBuilder<T> buildAPITag(String tag){

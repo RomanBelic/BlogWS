@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import com.esgi.al1.blogws.interfaces.IGenerateQuery;
+import com.esgi.al1.blogws.interfaces.IGeneratePreparedQuery;
 /**
  * Created by Romaaan on 19/03/2017.
  * comitted by Mokrane
@@ -24,7 +24,7 @@ public class PostControllerService implements IPostControllerService {
 
     private final IPostRepository postRepository;
 
-    private final IGenerateQuery updategenerator = (HashMap<String,Object> sqlParams) -> {
+    private final IGeneratePreparedQuery updategenerator = (HashMap<String,Object> sqlParams) -> {
         List<SqlParam> lstp = new ArrayList<>(sqlParams.size());
         String updStr = "";
         int index = 1;
@@ -38,7 +38,7 @@ public class PostControllerService implements IPostControllerService {
         return new GeneratedStatement(lstp, updStr);
     };
 
-    private final IGenerateQuery insertgenerator = (HashMap<String,Object> sqlParams) -> {
+    private final IGeneratePreparedQuery insertgenerator = (HashMap<String,Object> sqlParams) -> {
         List<SqlParam> lstp = new ArrayList<>(sqlParams.size());
         String insCols = "";
         String insVals = "";

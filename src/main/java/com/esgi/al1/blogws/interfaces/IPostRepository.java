@@ -4,6 +4,8 @@ import com.esgi.al1.blogws.models.Post;
 import com.esgi.al1.blogws.utils.GeneratedStatement;
 import com.esgi.al1.blogws.utils.SqlParam;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 

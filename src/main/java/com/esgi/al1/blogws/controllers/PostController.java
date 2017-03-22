@@ -14,7 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.*;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 
@@ -33,34 +36,34 @@ public class PostController {
                 this.postControllerService = postControllerService;
         }
 
+        public <T> WebModel<T> generateResponse(IResponse <T> resp, String apiTag, String action) {
+                IWebModelResponse<T> wm = (IResponse<T> arg) ->
+                        new WebModelBuilder<T>().
+                                buildAPITag(apiTag).
+                                buildAPIAction(action).
+                                buildContent(arg.getResponse()).
+                                build();
+                return wm.convertResponse(resp);
+        }
+
         @RequestMapping (value = Mapping.AllPosts + "/{start}/{end}", method = RequestMethod.GET)
         public @ResponseBody
         WebModel<List<Post>>
         getAllPosts (@PathVariable(required = true) int start,@PathVariable(required = true) int end){
                 IResponse<List<Post>> resp = () -> postControllerService.getAllPost(start, end);
-                IWebModelResponse<List<Post>> converter = (IResponse<List<Post>> response) ->
-                         new WebModelBuilder<List<Post>>().
-                                buildAPITag(APITags.PostAPITag).
-                                buildAPIAction(APIActions.getPosts).
-                                buildContent(resp.getResponse()).
-                                build();
                 Log.i("getting limited posts");
-                return converter.convertResponse(resp);
+
+
+                return generateResponse(resp, APITags.PostAPITag, APIActions.getPosts);
         }
 
         @RequestMapping (value =  Mapping.FindPost, method = RequestMethod.GET)
         public @ResponseBody
         WebModel<Post>
-        getPostById (@PathVariable(required = true) int id){
+        getPostById (@PathVariable(required = true) int id) {
                 IResponse<Post> resp = () -> postControllerService.getPost(id);
-                IWebModelResponse<Post> wm = (IResponse<Post> response) ->
-                        new WebModelBuilder<Post>().
-                                buildAPITag(APITags.PostAPITag).
-                                buildAPIAction(APIActions.getPosts).
-                                buildContent(resp.getResponse()).
-                                build();
-                Log.i("getting limited posts");
-                return wm.convertResponse(resp);
+                Log.i("getting a post by id");
+                return generateResponse(resp,APITags.PostAPITag, APIActions.getPosts);
         }
 
         @RequestMapping (value =  Mapping.AllPosts, method = RequestMethod.GET)
@@ -68,14 +71,8 @@ public class PostController {
         WebModel<List<Post>>
         getAllPosts (){
                 IResponse<List<Post>> resp = postControllerService::getAllPosts;
-                IWebModelResponse<List<Post>> wm = (IResponse<List<Post>> response) ->
-                        new WebModelBuilder<List<Post>>().
-                                buildAPITag(APITags.PostAPITag).
-                                buildAPIAction(APIActions.getPosts).
-                                buildContent(resp.getResponse()).
-                                build();
                 Log.i("getting all posts");
-                return wm.convertResponse(resp);
+                return generateResponse(resp,APITags.PostAPITag, APIActions.getPosts);
         }
 
         @RequestMapping (value =  Mapping.UpdatePost , method = RequestMethod.PUT)
@@ -87,8 +84,9 @@ public class PostController {
                     @RequestParam(value = "AuthorID", required = false) Integer authorId,
                     @RequestParam(value = "Date", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date date,
                     @RequestParam(value = "Tags", required = false) String tags,
-                    @RequestParam(value = "Title", required = false) String title
-        ) {
+                    @RequestParam(value = "Title", required = false) String title,
+                    HttpServletRequest request)throws IOException {
+
                 HashMap<String,Object> sqlParams = new HashMap<>(8);
                 if (text != null) sqlParams.put(PostTable.Columns.Text.getName(), text);
                 if (desc != null) sqlParams.put(PostTable.Columns.Description.getName(), desc);
@@ -98,14 +96,8 @@ public class PostController {
                 if (title != null) sqlParams.put(PostTable.Columns.Title.getName(), title);
 
                 IResponse<Integer> resp = () -> postControllerService.updatePost(sqlParams, id);
-                IWebModelResponse<Integer> wm = (IResponse<Integer> response) ->
-                        new WebModelBuilder<Integer>().
-                                buildAPITag(APITags.PostAPITag).
-                                buildAPIAction(APIActions.updatePost).
-                                buildContent(resp.getResponse()).
-                                build();
                 Log.i("updating post");
-                return wm.convertResponse(resp);
+                return generateResponse(resp,APITags.PostAPITag, APIActions.updatePost);
         }
 
         @RequestMapping (value =  Mapping.DeletePost , method = RequestMethod.DELETE)
@@ -113,14 +105,8 @@ public class PostController {
         WebModel<Integer>
         deletePost (@PathVariable(required = true) int id) {
                 IResponse<Integer> resp = () -> postControllerService.deletePost(id);
-                IWebModelResponse<Integer> wm = (IResponse<Integer> response) ->
-                        new WebModelBuilder<Integer>().
-                                buildAPITag(APITags.PostAPITag).
-                                buildAPIAction(APIActions.deletePost).
-                                buildContent(resp.getResponse()).
-                                build();
                 Log.i("deleteting post");
-                return wm.convertResponse(resp);
+                return generateResponse(resp,APITags.PostAPITag, APIActions.deletePost);
         }
 
         @RequestMapping (value = Mapping.InsertPost, method = RequestMethod.POST)
@@ -131,8 +117,9 @@ public class PostController {
                     @RequestParam(value = "AuthorID", required = false) Integer authorId,
                     @RequestParam(value = "Date", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date date,
                     @RequestParam(value = "Tags", required = false) String tags,
-                    @RequestParam(value = "Title", required = false) String title)
-        {
+                    @RequestParam(value = "Title", required = false) String title,
+                    HttpServletRequest request) throws IOException {
+
                 HashMap<String,Object> sqlParams = new HashMap<>(8);
                 if (text != null) sqlParams.put(PostTable.Columns.Text.getName(), text);
                 if (desc != null) sqlParams.put(PostTable.Columns.Description.getName(), desc);
@@ -140,16 +127,8 @@ public class PostController {
                 if (date != null) sqlParams.put(PostTable.Columns.Date.getName(), date);
                 if (tags != null) sqlParams.put(PostTable.Columns.Tags.getName(), tags);
                 if (title != null) sqlParams.put(PostTable.Columns.Title.getName(), title);
-
                 IResponse<Integer> resp = () -> postControllerService.insertPost(sqlParams);
-                IWebModelResponse<Integer> wm = (IResponse<Integer> response) ->
-                        new WebModelBuilder<Integer>().
-                                buildAPITag(APITags.PostAPITag).
-                                buildAPIAction(APIActions.insertPost).
-                                buildContent(resp.getResponse()).
-                                build();
                 Log.i("inserting post");
-                return wm.convertResponse(resp);
+                return generateResponse(resp,APITags.PostAPITag, APIActions.insertPost);
         }
-
 }

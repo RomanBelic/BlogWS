@@ -7,16 +7,6 @@ import java.io.Serializable;
  */
 public class WebModel<T> implements Serializable {
 
-    private T content;
-
-    public T getContent() {
-        return content;
-    }
-
-    public void setContent(T content) {
-        this.content = content;
-    }
-
     private String apiTag;
 
     public String getApiTag() {
@@ -25,6 +15,16 @@ public class WebModel<T> implements Serializable {
 
     public void setApiTag(String apiTag) {
         this.apiTag = apiTag;
+    }
+
+    private T content;
+
+    public T getContent() {
+        return content;
+    }
+
+    public void setContent(T content) {
+        this.content = content;
     }
 
     public WebModel(String apiTag, T content){

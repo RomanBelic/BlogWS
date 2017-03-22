@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * Created by Romaaan on 20/03/2017.
  */
-public class DataBase {
+public final class DataBase {
 
     private static final DataTable PT_instance = new PostTable("post","p");
 

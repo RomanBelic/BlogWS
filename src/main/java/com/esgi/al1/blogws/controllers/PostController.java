@@ -1,5 +1,5 @@
 package com.esgi.al1.blogws.controllers;
-
+import com.esgi.al1.blogws.controllers.Mapping.APITags;
 import com.esgi.al1.blogws.interfaces.IResponse;
 import com.esgi.al1.blogws.interfaces.IResponse.IWebModelResponse;
 import com.esgi.al1.blogws.interfaces.IPostControllerService;
@@ -8,7 +8,6 @@ import com.esgi.al1.blogws.models.WebModel;
 import com.esgi.al1.blogws.services.PostControllerService;
 import com.esgi.al1.blogws.utils.Log;
 import com.esgi.al1.blogws.utils.PostTable;
-import com.esgi.al1.blogws.utils.SqlParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +37,7 @@ public class PostController {
         getAllPosts (@PathVariable(required = true) int start,@PathVariable(required = true) int end){
                 IResponse<List<Post>> resp = () -> postControllerService.getAllPost(start, end);
                 IWebModelResponse<List<Post>> wm = (IResponse<List<Post>> response) ->
-                        new WebModel<List<Post>>(Mapping.PostAPI, response.getResponse());
+                        new WebModel<>(APITags.PostAPITag, response.getResponse());
                 Log.i("getting limited posts");
                 return wm.convertResponse(resp);
         }
@@ -49,7 +48,7 @@ public class PostController {
         getPostById (@PathVariable(required = true) int id){
                 IResponse<Post> resp = () -> postControllerService.getPost(id);
                 IWebModelResponse<Post> wm = (IResponse<Post> response) ->
-                        new WebModel<Post>(Mapping.PostAPI, response.getResponse());
+                        new WebModel<>(APITags.PostAPITag, response.getResponse());
                 Log.i("getting limited posts");
                 return wm.convertResponse(resp);
         }
@@ -60,7 +59,7 @@ public class PostController {
         getAllPosts (){
                 IResponse<List<Post>> resp = postControllerService::getAllPosts;
                 IWebModelResponse<List<Post>> wm = (IResponse<List<Post>> response) ->
-                        new WebModel<List<Post>>(Mapping.PostAPI, response.getResponse());
+                        new WebModel<>(APITags.PostAPITag, response.getResponse());
                 Log.i("getting all posts");
                 return wm.convertResponse(resp);
         }
@@ -76,7 +75,7 @@ public class PostController {
                     @RequestParam(value = "Tags", required = false) String tags,
                     @RequestParam(value = "Title", required = false) String title
         ) {
-                HashMap<String,Object> sqlParams = new HashMap<String,Object>(8);
+                HashMap<String,Object> sqlParams = new HashMap<>(8);
                 if (text != null) sqlParams.put(PostTable.Columns.Text.getName(), text);
                 if (desc != null) sqlParams.put(PostTable.Columns.Description.getName(), desc);
                 if (authorId != null) sqlParams.put(PostTable.Columns.AuthorId.getName(), authorId);
@@ -108,7 +107,7 @@ public class PostController {
                     @RequestParam(value = "Tags", required = false) String tags,
                     @RequestParam(value = "Title", required = false) String title)
         {
-                HashMap<String,Object> sqlParams = new HashMap<String,Object>(8);
+                HashMap<String,Object> sqlParams = new HashMap<>(8);
                 if (text != null) sqlParams.put(PostTable.Columns.Text.getName(), text);
                 if (desc != null) sqlParams.put(PostTable.Columns.Description.getName(), desc);
                 if (authorId != null) sqlParams.put(PostTable.Columns.AuthorId.getName(), authorId);

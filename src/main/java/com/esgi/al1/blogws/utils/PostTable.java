@@ -18,7 +18,7 @@ public class PostTable extends DataTable {
         Date("Date",3),
         Title("Title",4),
         Description("Description",5),
-        Tags("Tags",6),
+        Tags("APITags",6),
         Text("Text",7),
         BinaryContent("BinaryContent",8);
 

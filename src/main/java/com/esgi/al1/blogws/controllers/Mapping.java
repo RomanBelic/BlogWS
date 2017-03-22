@@ -12,4 +12,8 @@ public class Mapping {
     public static final String UpdatePost ="/UpdatePost/{id}";
     public static final String DeletePost = "/DeletePost/{id}";
     public static final String InsertPost = "/InsertPost";
+
+    public static class APITags {
+        public static final String PostAPITag = "PostAPI";
+    }
 }

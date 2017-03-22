@@ -1,7 +1,6 @@
 package com.esgi.al1.blogws.services;
 
 import com.esgi.al1.blogws.dao.PostRepository;
-import com.esgi.al1.blogws.interfaces.IControllerUtils.IGenerateQuery;
 import com.esgi.al1.blogws.interfaces.IPostControllerService;
 import com.esgi.al1.blogws.interfaces.IPostRepository;
 import com.esgi.al1.blogws.models.Post;
@@ -14,7 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import com.esgi.al1.blogws.interfaces.IGenerateQuery;
 /**
  * Created by Romaaan on 19/03/2017.
  * comitted by Mokrane
@@ -26,7 +25,7 @@ public class PostControllerService implements IPostControllerService {
     private final IPostRepository postRepository;
 
     private final IGenerateQuery updategenerator = (HashMap<String,Object> sqlParams) -> {
-        List<SqlParam> lstp = new ArrayList<SqlParam>(sqlParams.size());
+        List<SqlParam> lstp = new ArrayList<>(sqlParams.size());
         String updStr = "";
         int index = 1;
         for (Map.Entry<String,Object> e : sqlParams.entrySet()){
@@ -40,7 +39,7 @@ public class PostControllerService implements IPostControllerService {
     };
 
     private final IGenerateQuery insertgenerator = (HashMap<String,Object> sqlParams) -> {
-        List<SqlParam> lstp = new ArrayList<SqlParam>(sqlParams.size());
+        List<SqlParam> lstp = new ArrayList<>(sqlParams.size());
         String insCols = "";
         String insVals = "";
         int index = 1;

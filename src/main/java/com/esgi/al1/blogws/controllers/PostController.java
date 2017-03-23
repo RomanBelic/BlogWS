@@ -7,6 +7,7 @@ import com.esgi.al1.blogws.interfaces.IPostControllerService;
 import com.esgi.al1.blogws.models.Post;
 import com.esgi.al1.blogws.models.WebModel;
 import com.esgi.al1.blogws.services.PostControllerService;
+import com.esgi.al1.blogws.utils.DBUtils;
 import com.esgi.al1.blogws.utils.Log;
 import com.esgi.al1.blogws.utils.PostTable;
 import com.esgi.al1.blogws.utils.WebModelBuilder;
@@ -53,7 +54,6 @@ public class PostController {
                 IResponse<List<Post>> resp = () -> postControllerService.getAllPost(start, end);
                 Log.i("getting limited posts");
 
-
                 return generateResponse(resp, APITags.PostAPITag, APIActions.getPosts);
         }
 
@@ -94,6 +94,8 @@ public class PostController {
                 if (date != null) sqlParams.put(PostTable.Columns.Date.getName(), date);
                 if (tags != null) sqlParams.put(PostTable.Columns.Tags.getName(), tags);
                 if (title != null) sqlParams.put(PostTable.Columns.Title.getName(), title);
+                byte[] binaryContent = DBUtils.ConvertInputStream(request.getInputStream());
+                if (binaryContent.length > 0) sqlParams.put(PostTable.Columns.BinaryContent.getName(), binaryContent);
 
                 IResponse<Integer> resp = () -> postControllerService.updatePost(sqlParams, id);
                 Log.i("updating post");
@@ -127,6 +129,9 @@ public class PostController {
                 if (date != null) sqlParams.put(PostTable.Columns.Date.getName(), date);
                 if (tags != null) sqlParams.put(PostTable.Columns.Tags.getName(), tags);
                 if (title != null) sqlParams.put(PostTable.Columns.Title.getName(), title);
+                byte[] binaryContent = DBUtils.ConvertInputStream(request.getInputStream());
+                if (binaryContent.length > 0) sqlParams.put(PostTable.Columns.BinaryContent.getName(), binaryContent);
+
                 IResponse<Integer> resp = () -> postControllerService.insertPost(sqlParams);
                 Log.i("inserting post");
                 return generateResponse(resp,APITags.PostAPITag, APIActions.insertPost);

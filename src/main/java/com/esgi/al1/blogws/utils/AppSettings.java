@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Configuration;
 
 public class AppSettings {
 
+    public static final String CurrentDatabase = "blogws";
+
     private String db;
 
     public AppSettings(){

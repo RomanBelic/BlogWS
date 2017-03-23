@@ -4,8 +4,7 @@ import com.esgi.al1.blogws.dao.PostRepository;
 import com.esgi.al1.blogws.interfaces.IPostControllerService;
 import com.esgi.al1.blogws.interfaces.IPostRepository;
 import com.esgi.al1.blogws.models.Post;
-import com.esgi.al1.blogws.utils.GeneratedStatement;
-import com.esgi.al1.blogws.utils.SqlParam;
+import com.esgi.al1.blogws.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

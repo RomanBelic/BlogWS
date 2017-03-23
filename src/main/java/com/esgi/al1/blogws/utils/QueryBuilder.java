@@ -21,32 +21,32 @@ public class QueryBuilder  {
         this.orderBy = "";
     }
 
-    public QueryBuilder setTable (String table){
+    public QueryBuilder buildTable(String table){
         this.table = table;
         return this;
     }
 
-    public QueryBuilder setDatabase (String database){
+    public QueryBuilder buildDatabase(String database){
         this.database = database;
         return this;
     }
 
-    public QueryBuilder setWhere (String where){
+    public QueryBuilder buildWhere(String where){
         this.where = where;
         return this;
     }
 
-    public QueryBuilder setCommand (String command){
+    public QueryBuilder buildCommand(String command){
         this.command = command;
         return this;
     }
 
-    public QueryBuilder setUpdateArguments (String arguments){
+    public QueryBuilder buildUpdateArguments(String arguments){
         this.updatearguments = arguments;
         return this;
     }
 
-    public QueryBuilder setOrderBy (String order){
+    public QueryBuilder buildOrderBy(String order){
         this.orderBy = order;
         return this;
     }

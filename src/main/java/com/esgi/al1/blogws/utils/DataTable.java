@@ -10,8 +10,16 @@ public abstract class DataTable {
         this.alias = alias;
     }
 
-    protected final String name;
-    protected final String alias;
+    private final String name;
+    private final String alias;
+
+    public String getName() {
+        return name;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
 
     @Override
     public String toString(){

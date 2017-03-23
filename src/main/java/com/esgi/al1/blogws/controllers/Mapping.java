@@ -17,7 +17,7 @@ public class Mapping {
     }
 
     public static class APIActions {
-        public static final String getPosts = "getPosts";
+        public static final String getPosts = "getPost";
         public static final String updatePost = "updatePost";
         public static final String insertPost = "insertPost";
         public static final String deletePost = "deletePost";

@@ -5,6 +5,7 @@ import com.esgi.al1.blogws.interfaces.IPostRepository;
 import com.esgi.al1.blogws.models.Post;
 import com.esgi.al1.blogws.utils.*;
 import com.esgi.al1.blogws.utils.DataBase.Queries;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -17,6 +18,13 @@ import java.util.List;
 
 @Repository
 public class PostRepository  implements IPostRepository {
+
+    private final MySqlConnector connector;
+
+    @Autowired
+    public PostRepository(MySqlConnector connector) {
+        this.connector = connector;
+    }
 
     private Post getPostData(ResultSet rs) throws SQLException {
         Post p = new Post();
@@ -35,7 +43,7 @@ public class PostRepository  implements IPostRepository {
     @Override
     public List<Post> getAll() {
         List<Post> lstp = new ArrayList<>(64);
-        try(Connection cn = MySqlConnector.getNewConnection()){
+        try(Connection cn = connector.getNewConnection()){
             PreparedStatement st = cn.prepareStatement(Queries.getAllPosts);
             ResultSet rs = st.executeQuery();
             Post p;
@@ -53,7 +61,7 @@ public class PostRepository  implements IPostRepository {
     public int updatePost(GeneratedStatement gst, int id) {
         int rows = -1;
         String query = null;
-        try(Connection cn = MySqlConnector.getNewConnection()){
+        try(Connection cn = connector.getNewConnection()){
             query = Queries.updatePost.concat(gst.getParamStr()).concat(Queries.wherePostId);
             PreparedStatement st = cn.prepareStatement(query);
             DBUtils.copySqlParamsToStatement(gst.getLstParams(), st);
@@ -70,7 +78,7 @@ public class PostRepository  implements IPostRepository {
     @Override
     public int deletePost(int id) {
         int rows = -1;
-        try(Connection cn = MySqlConnector.getNewConnection()){
+        try(Connection cn = connector.getNewConnection()){
             PreparedStatement st = cn.prepareStatement(Queries.deletePost);
             st.setInt(1, id);
             rows = st.executeUpdate();
@@ -84,7 +92,7 @@ public class PostRepository  implements IPostRepository {
     public int insertPost(GeneratedStatement gst){
         int id = -1;
         String query = null;
-        try(Connection cn = MySqlConnector.getNewConnection()){
+        try(Connection cn = connector.getNewConnection()){
             query = Queries.insertPost.concat(gst.getParamStr());
             PreparedStatement st = cn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             DBUtils.copySqlParamsToStatement(gst.getLstParams(), st);
@@ -101,7 +109,7 @@ public class PostRepository  implements IPostRepository {
     @Override
     public List<Post> getAllByLimit(int start, int end) {
         List<Post> lstp = new ArrayList<>(64);
-        try(Connection cn = MySqlConnector.getNewConnection()){
+        try(Connection cn = connector.getNewConnection()){
             PreparedStatement st = cn.prepareStatement(Queries.getAllPostsLimit);
             st.setInt(1, start);
             st.setInt(2, end);
@@ -120,7 +128,7 @@ public class PostRepository  implements IPostRepository {
     @Override
     public Post getPostById(int id) {
         Post p = null;
-        try(Connection cn = MySqlConnector.getNewConnection()){
+        try(Connection cn = connector.getNewConnection()){
             PreparedStatement st = cn.prepareStatement(Queries.getPost);
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();

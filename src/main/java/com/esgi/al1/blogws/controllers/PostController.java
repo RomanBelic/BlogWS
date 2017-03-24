@@ -5,12 +5,10 @@ import com.esgi.al1.blogws.interfaces.IResponse;
 import com.esgi.al1.blogws.interfaces.IResponse.IWebModelResponse;
 import com.esgi.al1.blogws.interfaces.IPostControllerService;
 import com.esgi.al1.blogws.models.Post;
+import com.esgi.al1.blogws.models.SqlConfig;
 import com.esgi.al1.blogws.models.WebModel;
 import com.esgi.al1.blogws.services.PostControllerService;
-import com.esgi.al1.blogws.utils.DBUtils;
-import com.esgi.al1.blogws.utils.Log;
-import com.esgi.al1.blogws.utils.PostTable;
-import com.esgi.al1.blogws.utils.WebModelBuilder;
+import com.esgi.al1.blogws.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 
@@ -50,17 +47,16 @@ public class PostController {
         @RequestMapping (value = Mapping.AllPosts + "/{start}/{end}", method = RequestMethod.GET)
         public @ResponseBody
         WebModel<List<Post>>
-        getAllPosts (@PathVariable(required = true) int start,@PathVariable(required = true) int end){
+        getAllPosts ( int start, int end){
                 IResponse<List<Post>> resp = () -> postControllerService.getAllPost(start, end);
                 Log.i("getting limited posts");
-
                 return generateResponse(resp, APITags.PostAPITag, APIActions.getPosts);
         }
 
         @RequestMapping (value =  Mapping.FindPost, method = RequestMethod.GET)
         public @ResponseBody
         WebModel<Post>
-        getPostById (@PathVariable(required = true) int id) {
+        getPostById ( int id) {
                 IResponse<Post> resp = () -> postControllerService.getPost(id);
                 Log.i("getting a post by id");
                 return generateResponse(resp,APITags.PostAPITag, APIActions.getPosts);
@@ -78,7 +74,7 @@ public class PostController {
         @RequestMapping (value =  Mapping.UpdatePost , method = RequestMethod.PUT)
         public @ResponseBody
         WebModel<Integer>
-        updatePost (@PathVariable(required = true) int id,
+        updatePost ( int id,
                     @RequestParam(value = "Text", required = false) String text,
                     @RequestParam(value = "Description", required = false) String desc,
                     @RequestParam(value = "AuthorID", required = false) Integer authorId,
@@ -105,7 +101,7 @@ public class PostController {
         @RequestMapping (value =  Mapping.DeletePost , method = RequestMethod.DELETE)
         public @ResponseBody
         WebModel<Integer>
-        deletePost (@PathVariable(required = true) int id) {
+        deletePost ( int id) {
                 IResponse<Integer> resp = () -> postControllerService.deletePost(id);
                 Log.i("deleteting post");
                 return generateResponse(resp,APITags.PostAPITag, APIActions.deletePost);

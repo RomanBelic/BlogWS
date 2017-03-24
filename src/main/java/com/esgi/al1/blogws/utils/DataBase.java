@@ -1,5 +1,8 @@
 package com.esgi.al1.blogws.utils;
 
+import com.esgi.al1.blogws.models.SqlConfig;
+import org.springframework.beans.factory.annotation.Autowired;
+
 /**
  * Created by Romaaan on 20/03/2017.
  */

@@ -1,23 +1,36 @@
 package com.esgi.al1.blogws.dbconnector;
 
+import com.esgi.al1.blogws.models.SqlConfig;
 import com.esgi.al1.blogws.utils.Log;
+import com.esgi.al1.blogws.utils.Settings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Created by Romaaan on 18/03/2017.
  */
-
+@Component
 public class MySqlConnector {
 
-    public static Connection getNewConnection () throws SQLException{
+    @Autowired
+    public MySqlConnector(SqlConfig sqlCfg){
+        this.sqlCfg = sqlCfg;
+    }
+
+    private final SqlConfig sqlCfg;
+
+    public Connection getNewConnection () throws SQLException{
+
         Connection cn;
         try {
-             cn = DriverManager.getConnection("jdbc:mysql://localhost:3306?user=root&password=&convertToNull&autoReconnect=true&characterEncoding=UTF-8&characterSetResults=UTF-8&allowMultiQueries=true&useSSL=false");
+             cn = DriverManager.getConnection(sqlCfg.getConnectionString());
         }
         catch (SQLException e){
             Log.err("MySqlConnector : " + e.getMessage());
@@ -26,5 +39,8 @@ public class MySqlConnector {
         return cn;
     }
 
-
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+    }
 }

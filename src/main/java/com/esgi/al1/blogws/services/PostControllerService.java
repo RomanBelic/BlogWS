@@ -24,12 +24,10 @@ import com.esgi.al1.blogws.interfaces.IGeneratePreparedQuery;
 public class PostControllerService implements IPostControllerService {
 
     private final IPostRepository postRepository;
-    private final Queries queries;
 
     @Autowired
     public PostControllerService(PostRepository postRepository, Queries queries) {
         this.postRepository = postRepository;
-        this.queries = queries;
     }
 
     private final IGeneratePreparedQuery updategenerator = (HashMap<String,Object> sqlParams) -> {

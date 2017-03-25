@@ -38,7 +38,7 @@ public class PostControllerService implements IPostControllerService {
     }
 
     @Override
-    public List<Post> getAllPost(int start, int end) {
+    public List<Post> getAllPosts(int start, int end) {
         return postRepository.getAllByLimit(start, end);
     }
 

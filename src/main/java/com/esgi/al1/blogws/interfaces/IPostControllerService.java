@@ -12,7 +12,7 @@ public interface IPostControllerService {
 
     List<Post> getAllPosts ();
     Post getPost(int id);
-    List<Post> getAllPost(int start, int end);
+    List<Post> getAllPosts(int start, int end);
     int updatePost(HashMap<String,Object> sqlParams, int id);
     int deletePost(int id);
     int insertPost(HashMap<String,Object> sqlParams);

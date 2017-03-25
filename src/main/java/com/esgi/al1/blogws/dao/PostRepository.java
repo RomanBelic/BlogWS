@@ -19,7 +19,6 @@ import java.util.List;
 public class PostRepository  implements IPostRepository {
 
     private final MySqlConnector connector;
-
     private final Queries queries;
 
     @Autowired

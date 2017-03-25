@@ -5,7 +5,7 @@ package com.esgi.al1.blogws.utils;
  */
 public abstract class DataTable {
 
-    public DataTable(String name, String alias){
+    DataTable(String name, String alias){
         this.name = name;
         this.alias = alias;
     }

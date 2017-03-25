@@ -3,18 +3,21 @@ package com.esgi.al1.blogws.controllers;
 /**
  * Created by Romaaan on 18/03/2017.
  */
-public class Mapping {
+class Mapping {
 
     public static final String PostAPI ="/Post";
-    public static final String AllPosts ="/GetAll";
-    public static final String FindPost ="/GetPost/{id}";
-    public static final String UpdatePost ="/UpdatePost/{id}";
-    public static final String DeletePost = "/DeletePost/{id}";
-    public static final String InsertPost = "/InsertPost";
-    public static final String DownloadPostImage = "/DownloadImage/{post_id}";
+    public static final String UserAPI ="/User";
+
+    public static final String GetAll ="/GetAll";
+    public static final String FindById ="/Get/{id}";
+    public static final String UpdateById ="/Update/{id}";
+    public static final String DeleteById = "/Delete/{id}";
+    public static final String Insert = "/Insert";
+    public static final String DownloadImage = "/DownloadImage/{id}";
 
     public static class APITags {
         public static final String PostAPITag = "PostAPI";
+        public static final String UserAPITag = "UserAPI";
     }
 
     public static class APIActions {
@@ -22,6 +25,12 @@ public class Mapping {
         public static final String updatePost = "updatePost";
         public static final String insertPost = "insertPost";
         public static final String deletePost = "deletePost";
+
         public static final String downloadImage = "downloadImage";
+
+        public static final String getUsers = "getUser";
+        public static final String updateUser = "updateUser";
+        public static final String insertUser = "insertUser";
+        public static final String deleteUser = "deleteUser";
     }
 }

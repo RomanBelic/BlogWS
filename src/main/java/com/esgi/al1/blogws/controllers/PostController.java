@@ -35,7 +35,7 @@ public class PostController {
                 this.postControllerService = postControllerService;
         }
 
-        public <T> WebModel<T> generateResponse(IResponse <T> resp, String apiTag, String action) {
+        private <T> WebModel<T> generateResponse(IResponse<T> resp, String apiTag, String action) {
                 IWebModelResponse<T> wm = (IResponse<T> arg) ->
                         new WebModelBuilder<T>().
                                 buildAPITag(apiTag).
@@ -45,16 +45,16 @@ public class PostController {
                 return wm.convertResponse(resp);
         }
 
-        @RequestMapping (value = Mapping.AllPosts + "/{start}/{end}", method = RequestMethod.GET)
+        @RequestMapping (value = Mapping.GetAll + "/{start}/{end}", method = RequestMethod.GET)
         public @ResponseBody
         WebModel<List<Post>>
         getAllPosts ( int start, int end){
-                IResponse<List<Post>> resp = () -> postControllerService.getAllPost(start, end);
+                IResponse<List<Post>> resp = () -> postControllerService.getAllPosts(start, end);
                 Log.i("getting limited posts");
                 return generateResponse(resp, APITags.PostAPITag, APIActions.getPosts);
         }
 
-        @RequestMapping (value = Mapping.FindPost, method = RequestMethod.GET)
+        @RequestMapping (value = Mapping.FindById, method = RequestMethod.GET)
         public @ResponseBody
         WebModel<Post>
         getPostById (@PathVariable Integer id) {
@@ -62,7 +62,7 @@ public class PostController {
                 return generateResponse(resp,APITags.PostAPITag, APIActions.getPosts);
         }
 
-        @RequestMapping (value =  Mapping.AllPosts, method = RequestMethod.GET)
+        @RequestMapping (value =  Mapping.GetAll, method = RequestMethod.GET)
         public @ResponseBody
         WebModel<List<Post>>
         getAllPosts () {
@@ -71,7 +71,7 @@ public class PostController {
                 return generateResponse(resp, APITags.PostAPITag, APIActions.getPosts);
         }
 
-        @RequestMapping (value =  Mapping.UpdatePost , method = RequestMethod.PUT)
+        @RequestMapping (value =  Mapping.UpdateById , method = RequestMethod.PUT)
         public @ResponseBody
         WebModel<Integer>
         updatePost (@PathVariable Integer id,
@@ -81,6 +81,7 @@ public class PostController {
                     @RequestParam(value = "Date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date,
                     @RequestParam(value = "Tags", required = false) String tags,
                     @RequestParam(value = "Title", required = false) String title,
+                    @RequestParam(value = "FileName", required = false) String fileName,
                     HttpServletRequest request)throws IOException {
 
                 HashMap<String,Object> sqlParams = new HashMap<>(8);
@@ -90,6 +91,7 @@ public class PostController {
                 if (date != null) sqlParams.put(PostTable.Columns.Date.getName(), date);
                 if (tags != null) sqlParams.put(PostTable.Columns.Tags.getName(), tags);
                 if (title != null) sqlParams.put(PostTable.Columns.Title.getName(), title);
+                if (text != null) sqlParams.put(PostTable.Columns.FileName.getName(), fileName);
                 byte[] binaryContent = DBUtils.ConvertInputStream(request.getInputStream());
                 if (binaryContent.length > 0) sqlParams.put(PostTable.Columns.BinaryContent.getName(), binaryContent);
 
@@ -98,16 +100,16 @@ public class PostController {
                 return generateResponse(resp,APITags.PostAPITag, APIActions.updatePost);
         }
 
-        @RequestMapping (value =  Mapping.DeletePost , method = RequestMethod.DELETE)
+        @RequestMapping (value = Mapping.DeleteById, method = RequestMethod.DELETE)
         public @ResponseBody
         WebModel<Integer>
         deletePost (@PathVariable Integer id) {
                 IResponse<Integer> resp = () -> postControllerService.deletePost(id);
-                Log.i("deleteting post");
+                Log.i("deleting post");
                 return generateResponse(resp,APITags.PostAPITag, APIActions.deletePost);
         }
 
-        @RequestMapping (value = Mapping.InsertPost, method = RequestMethod.POST)
+        @RequestMapping (value = Mapping.Insert, method = RequestMethod.POST)
         public @ResponseBody
         WebModel<Integer>
         insertPost (@RequestParam(value = "Text", required = false) String text,
@@ -116,6 +118,7 @@ public class PostController {
                     @RequestParam(value = "Date",  required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date,
                     @RequestParam(value = "Tags", required = false) String tags,
                     @RequestParam(value = "Title", required = false) String title,
+                    @RequestParam(value = "FileName", required = false) String fileName,
                     HttpServletRequest request) throws IOException {
 
                 HashMap<String,Object> sqlParams = new HashMap<>(8);
@@ -125,6 +128,7 @@ public class PostController {
                 if (date != null) sqlParams.put(PostTable.Columns.Date.getName(), date);
                 if (tags != null) sqlParams.put(PostTable.Columns.Tags.getName(), tags);
                 if (title != null) sqlParams.put(PostTable.Columns.Title.getName(), title);
+                if (text != null) sqlParams.put(PostTable.Columns.FileName.getName(), fileName);
                 byte[] binaryContent = DBUtils.ConvertInputStream(request.getInputStream());
                 if (binaryContent.length > 0) sqlParams.put(PostTable.Columns.BinaryContent.getName(), binaryContent);
 
@@ -133,11 +137,11 @@ public class PostController {
                 return generateResponse(resp,APITags.PostAPITag, APIActions.insertPost);
         }
 
-        @RequestMapping (value =  Mapping.DownloadPostImage, method = RequestMethod.GET)
+        @RequestMapping (value = Mapping.DownloadImage, method = RequestMethod.GET)
         @ResponseStatus(HttpStatus.OK)
         @ResponseBody
         public WebModel<Integer>
-        downloadPostImageById (@PathVariable Integer post_id, HttpServletResponse response) throws IOException {
+        downloadPostImageById (@PathVariable (value="id") Integer post_id, HttpServletResponse response) throws IOException {
                 Post post = postControllerService.getPost(post_id);
                 int imgLength = post.getBinaryContent().length;
                 long timeNow = Date.from(new Date().toInstant()).getTime();

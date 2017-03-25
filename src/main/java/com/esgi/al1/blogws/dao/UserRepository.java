@@ -6,6 +6,7 @@ import com.esgi.al1.blogws.models.User;
 import com.esgi.al1.blogws.models.UserType;
 import com.esgi.al1.blogws.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,6 +15,7 @@ import java.util.List;
 /**
  * Created by Romaaan on 25/03/2017.
  */
+@Repository
 public class UserRepository implements IUserRepository {
 
     private final MySqlConnector connector;

@@ -1,6 +1,5 @@
 package com.esgi.al1.blogws.models;
 
-import javax.websocket.Decoder;
 import java.io.Serializable;
 import java.util.Date;
 

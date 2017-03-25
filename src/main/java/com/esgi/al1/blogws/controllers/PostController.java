@@ -8,8 +8,6 @@ import com.esgi.al1.blogws.models.Post;
 import com.esgi.al1.blogws.models.WebModel;
 import com.esgi.al1.blogws.services.PostControllerService;
 import com.esgi.al1.blogws.utils.*;
-import org.apache.http.HttpResponse;
-import org.apache.http.entity.StringEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;

@@ -1,8 +1,6 @@
 package com.esgi.al1.blogws.utils;
 
-import ch.qos.logback.classic.db.SQLBuilder;
 import com.esgi.al1.blogws.utils.SqlConfigBuilder;
-import org.springframework.stereotype.Component;
 
 /**
  * Created by Romaaan on 23/03/2017.

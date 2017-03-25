@@ -35,8 +35,4 @@ public class MySqlConnector {
         return cn;
     }
 
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-    }
 }

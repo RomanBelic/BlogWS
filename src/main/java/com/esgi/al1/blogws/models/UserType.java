@@ -25,7 +25,7 @@ public enum UserType {
         this.typeStr = typeStr;
     }
 
-    public UserType getUserTypeById(int id){
+    public static UserType getUserTypeById(int id){
         switch (id){
             case 1 :
                 return Admin;

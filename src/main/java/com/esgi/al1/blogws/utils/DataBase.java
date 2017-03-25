@@ -1,7 +1,5 @@
 package com.esgi.al1.blogws.utils;
 
-import org.springframework.stereotype.Component;
-
 /**
  * Created by Romaaan on 20/03/2017.
  */

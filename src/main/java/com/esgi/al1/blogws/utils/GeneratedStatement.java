@@ -26,4 +26,5 @@ public class GeneratedStatement {
     public SqlParam getLastParam(){
         return (lstParams.size() > 0) ? lstParams.get(lstParams.size() - 1) : new SqlParam(0, null);
     }
+
 }

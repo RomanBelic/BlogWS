@@ -54,10 +54,9 @@ public class QueryBuilder  {
     public String build(){
         return command.concat(" ").
                 concat(database).concat(".").concat(table).concat(" ").
-                concat(updatearguments).concat(" ").concat(where).concat(" ").
+                concat(updatearguments).concat(" ").
+                concat(where).concat(" ").
                 concat(orderBy);
     }
-
-
 
 }

@@ -14,7 +14,6 @@ public class BlogWebServiceApplication {
 
 	public static void main(String[] args) {
 		System.setProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME, Settings.ProductionProfile);
-		SpringApplication.run(BlogWebServiceApplication.class, args
-		);
+		SpringApplication.run(BlogWebServiceApplication.class, args);
 	}
 }

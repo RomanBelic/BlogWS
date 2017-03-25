@@ -17,8 +17,17 @@ public class Post implements Serializable {
      private String tags;
      private byte[] binaryContent;
      private String text;
+     private String FileName;
 
-     public Post (){}
+    public String getFileName() {
+        return FileName;
+    }
+
+    public void setFileName(String fileName) {
+        FileName = fileName;
+    }
+
+    public Post (){}
 
     public byte[] getBinaryContent() {
         return binaryContent;

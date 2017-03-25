@@ -1,18 +1,18 @@
 package com.esgi.al1.blogws.utils;
 
-import com.esgi.al1.blogws.models.SqlConfig;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
+import org.springframework.test.context.ActiveProfiles;
 
 import javax.annotation.PostConstruct;
-
-import static com.esgi.al1.blogws.utils.Settings.ProductionProfile;
 
 /**
  * Created by Romaaan on 18/03/2017.
  */
 @Configuration
+@EnableCaching
 @PropertySource("application.properties")
 public class Settings {
 
@@ -23,14 +23,16 @@ public class Settings {
 
     private SqlConfig sqlconf;
 
+    private DataBase dataBase;
+    private DataBase dataBaseTest;
+
     @Autowired
     public Settings(Environment env) {
         this.env = env;
     }
 
     @PostConstruct
-    @Profile(ProductionProfile)
-    private void initSetting() {
+    private void initSqlSettings() {
         sqlconf = new SqlConfigBuilder().
                 buildDriver(env.getProperty("connectionstring.driver", "jdbc:mysql")).
                 buildHost(env.getProperty("connectionstring.host","localhost")).
@@ -40,9 +42,36 @@ public class Settings {
                 buildConnectionParams(env.getProperty("connectionstring.dbparams")).build();
     }
 
+    @PostConstruct
+    @Profile(ProductionProfile)
+    private void initDBProd (){
+        dataBase = new DataBaseBuilder().
+                buildName(env.getProperty("database.prod")).
+                buildPostTable("post","p").build();
+    }
+
+    @PostConstruct
+    @Profile(TestProfile)
+    private void initDBTest (){
+        dataBaseTest = new DataBaseBuilder().
+                buildName(env.getProperty("database.test")).
+                buildPostTable("post","p").build();
+    }
+
     @Bean
     public SqlConfig getSqlConfig(){
         return sqlconf;
     }
 
+    @Bean
+    @Profile(ProductionProfile)
+    public DataBase getDataBase(){
+        return dataBase;
+    }
+
+    @Bean
+    @Profile(TestProfile)
+    public DataBase getDataBaseTest(){
+        return dataBaseTest;
+    }
 }

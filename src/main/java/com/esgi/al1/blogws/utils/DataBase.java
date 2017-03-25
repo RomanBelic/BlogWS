@@ -1,35 +1,33 @@
 package com.esgi.al1.blogws.utils;
 
-import com.esgi.al1.blogws.models.SqlConfig;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by Romaaan on 20/03/2017.
  */
+
 public final class DataBase {
 
-    public static final DataTable DataTable = new PostTable("post","p");
+    private String name;
 
-    public static class Queries {
-
-        public static final String wherePostId = " WHERE ".concat(PostTable.Columns.Id.getName()).concat("=?");
-        public static final String getAllPosts = "SELECT * FROM  ".concat("blogws.").
-                                                        concat(DataTable.getName()).
-                                                        concat(" Order By ").
-                                                        concat(PostTable.Columns.Date.getName()).
-                                                        concat(" DESC");
-        public static final String updatePost = "UPDATE ".concat("blogws.").concat(DataTable.getName()).concat(" SET ");
-        public static final String deletePost = "DELETE FROM ".concat("blogws.").
-                                                        concat(DataTable.getName()).
-                                                        concat(wherePostId);
-        public static final String insertPost = "INSERT INTO ".concat("blogws.").concat(DataTable.getName());
-        public static final String getAllPostsLimit = "SELECT * FROM  ".concat("blogws.").
-                                                        concat(DataTable.getName()).
-                                                        concat(" Order By ").
-                                                        concat(PostTable.Columns.Date.getName()).
-                                                        concat(" DESC ").
-                                                        concat("LIMIT ?,?");
-        public static final String getPost = "SELECT * FROM blogws.".concat(DataTable.getName()).concat(wherePostId);
+    public String getName() {
+        return name;
     }
 
+    private DataTable postTable;
+
+    public DataTable getPostTable() {
+        return postTable;
+    }
+
+    public DataBase (){
+
+    }
+    public DataBase (DataBaseBuilder builder){
+        this.name = builder.getName();
+        this.postTable = builder.getPostTable();
+    }
+
+    @Override
+    public String toString(){return this.name;}
 }

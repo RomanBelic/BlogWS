@@ -5,15 +5,18 @@ import com.esgi.al1.blogws.interfaces.IResponse;
 import com.esgi.al1.blogws.interfaces.IResponse.IWebModelResponse;
 import com.esgi.al1.blogws.interfaces.IPostControllerService;
 import com.esgi.al1.blogws.models.Post;
-import com.esgi.al1.blogws.models.SqlConfig;
 import com.esgi.al1.blogws.models.WebModel;
 import com.esgi.al1.blogws.services.PostControllerService;
 import com.esgi.al1.blogws.utils.*;
+import org.apache.http.HttpResponse;
+import org.apache.http.entity.StringEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.Date;
 import java.util.HashMap;
@@ -53,32 +56,31 @@ public class PostController {
                 return generateResponse(resp, APITags.PostAPITag, APIActions.getPosts);
         }
 
-        @RequestMapping (value =  Mapping.FindPost, method = RequestMethod.GET)
+        @RequestMapping (value = Mapping.FindPost, method = RequestMethod.GET)
         public @ResponseBody
         WebModel<Post>
-        getPostById ( int id) {
+        getPostById (@PathVariable Integer id) {
                 IResponse<Post> resp = () -> postControllerService.getPost(id);
-                Log.i("getting a post by id");
                 return generateResponse(resp,APITags.PostAPITag, APIActions.getPosts);
         }
 
         @RequestMapping (value =  Mapping.AllPosts, method = RequestMethod.GET)
         public @ResponseBody
         WebModel<List<Post>>
-        getAllPosts (){
+        getAllPosts () {
                 IResponse<List<Post>> resp = postControllerService::getAllPosts;
                 Log.i("getting all posts");
-                return generateResponse(resp,APITags.PostAPITag, APIActions.getPosts);
+                return generateResponse(resp, APITags.PostAPITag, APIActions.getPosts);
         }
 
         @RequestMapping (value =  Mapping.UpdatePost , method = RequestMethod.PUT)
         public @ResponseBody
         WebModel<Integer>
-        updatePost ( int id,
+        updatePost (@PathVariable Integer id,
                     @RequestParam(value = "Text", required = false) String text,
                     @RequestParam(value = "Description", required = false) String desc,
                     @RequestParam(value = "AuthorID", required = false) Integer authorId,
-                    @RequestParam(value = "Date", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date date,
+                    @RequestParam(value = "Date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date,
                     @RequestParam(value = "Tags", required = false) String tags,
                     @RequestParam(value = "Title", required = false) String title,
                     HttpServletRequest request)throws IOException {
@@ -101,7 +103,7 @@ public class PostController {
         @RequestMapping (value =  Mapping.DeletePost , method = RequestMethod.DELETE)
         public @ResponseBody
         WebModel<Integer>
-        deletePost ( int id) {
+        deletePost (@PathVariable Integer id) {
                 IResponse<Integer> resp = () -> postControllerService.deletePost(id);
                 Log.i("deleteting post");
                 return generateResponse(resp,APITags.PostAPITag, APIActions.deletePost);
@@ -113,7 +115,7 @@ public class PostController {
         insertPost (@RequestParam(value = "Text", required = false) String text,
                     @RequestParam(value = "Description", required = false) String desc,
                     @RequestParam(value = "AuthorID", required = false) Integer authorId,
-                    @RequestParam(value = "Date", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date date,
+                    @RequestParam(value = "Date",  required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date,
                     @RequestParam(value = "Tags", required = false) String tags,
                     @RequestParam(value = "Title", required = false) String title,
                     HttpServletRequest request) throws IOException {
@@ -131,5 +133,26 @@ public class PostController {
                 IResponse<Integer> resp = () -> postControllerService.insertPost(sqlParams);
                 Log.i("inserting post");
                 return generateResponse(resp,APITags.PostAPITag, APIActions.insertPost);
+        }
+
+        @RequestMapping (value =  Mapping.DownloadPostImage, method = RequestMethod.GET)
+        @ResponseStatus(HttpStatus.OK)
+        @ResponseBody
+        public WebModel<Integer>
+        downloadPostImageById (@PathVariable Integer post_id, HttpServletResponse response) throws IOException {
+                Post post = postControllerService.getPost(post_id);
+                int imgLength = post.getBinaryContent().length;
+                long timeNow = Date.from(new Date().toInstant()).getTime();
+                response.addHeader("Content-Disposition", "attachment; filename=" + timeNow + "_" + post.getFileName());
+                response.addHeader("Content-Length", String.valueOf(imgLength));
+                response.addHeader("Cache-Control", "no-store");
+                response.addHeader("Pragma", "no-cache");
+                response.setDateHeader("Expires", 0);
+                response.setContentType("image/jpeg");
+                try (OutputStream os = response.getOutputStream()) {
+                        os.write(post.getBinaryContent());
+                        os.flush();
+                }
+                return generateResponse(() -> imgLength, APITags.PostAPITag, APIActions.downloadImage);
         }
 }

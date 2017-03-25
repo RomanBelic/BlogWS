@@ -69,7 +69,12 @@
 			<artifactId>mockito-all</artifactId>
 			<version>1.10.19</version>
 		</dependency>
-		<!-- *********************End tests dependencies****************************              -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>4.3.6.RELEASE</version>
+        </dependency>
+        <!-- *********************End tests dependencies****************************              -->
 	</dependencies>
 
 	<build>

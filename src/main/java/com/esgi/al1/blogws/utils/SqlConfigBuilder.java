@@ -1,8 +1,5 @@
 package com.esgi.al1.blogws.utils;
 
-import ch.qos.logback.core.net.LoginAuthenticator;
-import com.esgi.al1.blogws.models.SqlConfig;
-
 /**
  * Created by Romaaan on 24/03/2017.
  */

@@ -1,4 +1,4 @@
-package com.esgi.al1.blogws.models;
+package com.esgi.al1.blogws.utils;
 
 import ch.qos.logback.classic.db.SQLBuilder;
 import com.esgi.al1.blogws.utils.SqlConfigBuilder;

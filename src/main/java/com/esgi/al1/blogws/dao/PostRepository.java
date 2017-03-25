@@ -4,7 +4,6 @@ import com.esgi.al1.blogws.dbconnector.MySqlConnector;
 import com.esgi.al1.blogws.interfaces.IPostRepository;
 import com.esgi.al1.blogws.models.Post;
 import com.esgi.al1.blogws.utils.*;
-import com.esgi.al1.blogws.utils.DataBase.Queries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -21,9 +20,12 @@ public class PostRepository  implements IPostRepository {
 
     private final MySqlConnector connector;
 
+    private final Queries queries;
+
     @Autowired
-    public PostRepository(MySqlConnector connector) {
+    public PostRepository(MySqlConnector connector, Queries queries) {
         this.connector = connector;
+        this.queries = queries;
     }
 
     private Post getPostData(ResultSet rs) throws SQLException {
@@ -36,6 +38,7 @@ public class PostRepository  implements IPostRepository {
         p.setTags(rs.getString(PostTable.Columns.Tags.getOrdinal()));
         p.setText(rs.getString(PostTable.Columns.Text.getOrdinal()));
         p.setBinaryContent(DBUtils.ConvertBlob(rs.getBlob(PostTable.Columns.BinaryContent.getOrdinal())));
+        p.setFileName(rs.getString(PostTable.Columns.FileName.getOrdinal()));
 
         return p;
     }
@@ -44,7 +47,7 @@ public class PostRepository  implements IPostRepository {
     public List<Post> getAll() {
         List<Post> lstp = new ArrayList<>(64);
         try(Connection cn = connector.getNewConnection()){
-            PreparedStatement st = cn.prepareStatement(Queries.getAllPosts);
+            PreparedStatement st = cn.prepareStatement(queries.GetAllPosts);
             ResultSet rs = st.executeQuery();
             Post p;
             while (rs.next()){
@@ -53,6 +56,7 @@ public class PostRepository  implements IPostRepository {
             }
         }catch (SQLException e){
             Log.err("Post dao : " + e.getMessage());
+            Log.err("Query : " + queries.GetAllPosts);
         }
         return lstp;
     }
@@ -62,7 +66,7 @@ public class PostRepository  implements IPostRepository {
         int rows = -1;
         String query = null;
         try(Connection cn = connector.getNewConnection()){
-            query = Queries.updatePost.concat(gst.getParamStr()).concat(Queries.wherePostId);
+            query = queries.UpdatePost.concat(gst.getParamStr()).concat(queries.WherePostId);
             PreparedStatement st = cn.prepareStatement(query);
             DBUtils.copySqlParamsToStatement(gst.getLstParams(), st);
             st.setInt(gst.getLastParam().getIndex() + 1, id);
@@ -79,11 +83,12 @@ public class PostRepository  implements IPostRepository {
     public int deletePost(int id) {
         int rows = -1;
         try(Connection cn = connector.getNewConnection()){
-            PreparedStatement st = cn.prepareStatement(Queries.deletePost);
+            PreparedStatement st = cn.prepareStatement(queries.DeletePost);
             st.setInt(1, id);
             rows = st.executeUpdate();
         }catch (SQLException e){
             Log.err("Post dao : " + e.getMessage());
+            Log.err("Query : " + queries.DeletePost);
         }
         return rows;
     }
@@ -93,7 +98,7 @@ public class PostRepository  implements IPostRepository {
         int id = -1;
         String query = null;
         try(Connection cn = connector.getNewConnection()){
-            query = Queries.insertPost.concat(gst.getParamStr());
+            query = queries.InsertPost.concat(gst.getParamStr());
             PreparedStatement st = cn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             DBUtils.copySqlParamsToStatement(gst.getLstParams(), st);
             st.executeUpdate();
@@ -110,7 +115,7 @@ public class PostRepository  implements IPostRepository {
     public List<Post> getAllByLimit(int start, int end) {
         List<Post> lstp = new ArrayList<>(64);
         try(Connection cn = connector.getNewConnection()){
-            PreparedStatement st = cn.prepareStatement(Queries.getAllPostsLimit);
+            PreparedStatement st = cn.prepareStatement(queries.GetAllPostsLimit);
             st.setInt(1, start);
             st.setInt(2, end);
             ResultSet rs = st.executeQuery();
@@ -121,6 +126,7 @@ public class PostRepository  implements IPostRepository {
             }
         }catch (SQLException e){
             Log.err("Post dao : " + e.getMessage());
+            Log.err("Query : " + queries.GetAllPostsLimit);
         }
         return lstp;
     }
@@ -129,12 +135,13 @@ public class PostRepository  implements IPostRepository {
     public Post getPostById(int id) {
         Post p = null;
         try(Connection cn = connector.getNewConnection()){
-            PreparedStatement st = cn.prepareStatement(Queries.getPost);
+            PreparedStatement st = cn.prepareStatement(queries.GetPost);
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
             p = rs.next() ? getPostData(rs) : null;
         }catch (SQLException e){
             Log.err("Post dao : " + e.getMessage());
+            Log.err("Query : " + queries.GetPost);
         }
         return p;
     }

@@ -1,0 +1,44 @@
+{
+  "properties": [
+    {
+      "name": "connectionstring.host",
+      "type": "java.lang.String",
+      "description": "Description for connectionstring.host."
+    },
+    {
+      "name": "connectionstring.sqlport",
+      "type": "java.lang.String",
+      "description": "Description for connectionstring.sqlport."
+    },
+    {
+      "name": "connectionstring.driver",
+      "type": "java.lang.String",
+      "description": "Description for connectionstring.driver."
+    },
+    {
+      "name": "connectionstring.dbparams",
+      "type": "java.lang.String",
+      "description": "Description for connectionstring.dbparams."
+    },
+    {
+      "name": "connectionstring.login",
+      "type": "java.lang.String",
+      "description": "Description for connectionstring.login."
+    },
+    {
+      "name": "connectionstring.pass",
+      "type": "java.lang.String",
+      "description": "Description for connectionstring.pass."
+    },
+    {
+      "name": "database.prod",
+      "type": "java.lang.String",
+      "description": "Description for database.prod."
+    },
+    {
+      "name": "database.test",
+      "type": "java.lang.String",
+      "description": "Description for database.test."
+    }
+  ]
+}

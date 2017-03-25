@@ -20,7 +20,9 @@ public class PostTable extends DataTable {
         Description("Description",5),
         Tags("APITags",6),
         Text("Text",7),
-        BinaryContent("BinaryContent",8);
+        BinaryContent("BinaryContent",8),
+        FileName("FileName",9)
+        ;
 
         private final String columnName;
         private final int ordinal;

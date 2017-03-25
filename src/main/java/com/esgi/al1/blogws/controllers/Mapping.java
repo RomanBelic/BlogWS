@@ -11,6 +11,7 @@ public class Mapping {
     public static final String UpdatePost ="/UpdatePost/{id}";
     public static final String DeletePost = "/DeletePost/{id}";
     public static final String InsertPost = "/InsertPost";
+    public static final String DownloadPostImage = "/DownloadImage/{post_id}";
 
     public static class APITags {
         public static final String PostAPITag = "PostAPI";
@@ -21,5 +22,6 @@ public class Mapping {
         public static final String updatePost = "updatePost";
         public static final String insertPost = "insertPost";
         public static final String deletePost = "deletePost";
+        public static final String downloadImage = "downloadImage";
     }
 }

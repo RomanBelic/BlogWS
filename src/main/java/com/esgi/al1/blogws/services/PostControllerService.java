@@ -13,15 +13,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import com.esgi.al1.blogws.interfaces.IGeneratePreparedQuery;
+
 /**
  * Created by Romaaan on 19/03/2017.
  * comitted by Mokrane
  */
+//Grosse usine à gaz
 
 @Service
 public class PostControllerService implements IPostControllerService {
 
     private final IPostRepository postRepository;
+    private final Queries queries;
+
+    @Autowired
+    public PostControllerService(PostRepository postRepository, Queries queries) {
+        this.postRepository = postRepository;
+        this.queries = queries;
+    }
 
     private final IGeneratePreparedQuery updategenerator = (HashMap<String,Object> sqlParams) -> {
         List<SqlParam> lstp = new ArrayList<>(sqlParams.size());
@@ -34,6 +43,7 @@ public class PostControllerService implements IPostControllerService {
         }
         index = updStr.indexOf(',');
         updStr = (index != -1 && updStr.length() > 0) ? updStr.substring(index + 1, updStr.length()) : updStr;
+
         return new GeneratedStatement(lstp, updStr);
     };
 
@@ -58,11 +68,6 @@ public class PostControllerService implements IPostControllerService {
 
         return new GeneratedStatement(lstp, insCols.concat(insVals));
     };
-
-    @Autowired
-    public PostControllerService(PostRepository postRepository) {
-        this.postRepository = postRepository;
-    }
 
     @Override
     public List<Post> getAllPosts() {
@@ -95,5 +100,4 @@ public class PostControllerService implements IPostControllerService {
         GeneratedStatement gst = insertgenerator.generateStatement(sqlParams);
         return postRepository.insertPost(gst);
     }
-
 }

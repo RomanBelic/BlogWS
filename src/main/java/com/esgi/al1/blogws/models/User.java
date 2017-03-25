@@ -16,6 +16,8 @@ public class User {
     private String fileName;
     private UserType type;
 
+    public User (){}
+
     public int getId() {
         return id;
     }

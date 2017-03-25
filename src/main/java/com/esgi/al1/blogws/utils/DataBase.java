@@ -10,22 +10,28 @@ public final class DataBase {
 
     private String name;
 
+    private final DataTable postTable = new PostTable("post","p");
+
+    private final DataTable userTable = new PostTable("user","u");
+
+    public DataBase(String name) {
+        this.name = name;
+    }
+
     public String getName() {
         return name;
     }
-
-    private DataTable postTable;
 
     public DataTable getPostTable() {
         return postTable;
     }
 
+    public DataTable getUserTable() {
+        return userTable;
+    }
+
     public DataBase (){
 
-    }
-    public DataBase (DataBaseBuilder builder){
-        this.name = builder.getName();
-        this.postTable = builder.getPostTable();
     }
 
     @Override

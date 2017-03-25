@@ -10,7 +10,6 @@ import com.esgi.al1.blogws.utils.Log;
 import com.esgi.al1.blogws.utils.UserTable;
 import com.esgi.al1.blogws.utils.WebModelBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

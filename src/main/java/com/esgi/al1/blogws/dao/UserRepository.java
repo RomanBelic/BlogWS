@@ -3,7 +3,6 @@ package com.esgi.al1.blogws.dao;
 import com.esgi.al1.blogws.dbconnector.MySqlConnector;
 import com.esgi.al1.blogws.interfaces.IUserRepository;
 import com.esgi.al1.blogws.models.User;
-import com.esgi.al1.blogws.models.User;
 import com.esgi.al1.blogws.models.UserType;
 import com.esgi.al1.blogws.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -24,6 +24,7 @@ public class Settings {
     private SqlConfig sqlconf;
 
     private DataBase dataBase;
+    private DataBase dataBaseTest;
 
     @Autowired
     public Settings(Environment env) {
@@ -50,7 +51,7 @@ public class Settings {
     @PostConstruct
     @Profile(TestProfile)
     private void initDBTest (){
-        dataBase = new DataBase(env.getProperty("database.test","blogws_test"));
+        dataBaseTest = new DataBase(env.getProperty("database.test","blogws_test"));
     }
 
     @Bean
@@ -67,6 +68,6 @@ public class Settings {
     @Bean
     @Profile(TestProfile)
     public DataBase getDataBaseTest(){
-        return dataBase;
+        return dataBaseTest;
     }
 }

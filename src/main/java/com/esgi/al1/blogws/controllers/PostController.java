@@ -40,6 +40,7 @@ public class PostController extends AbstractController <Post> {
 
         @RequestMapping (value = Mapping.GetAll + "/{start}/{end}", method = RequestMethod.GET)
         public @ResponseBody
+        @ResponseStatus(value = HttpStatus.OK)
         WebModel<List<Post>>
         getAllPosts (@PathVariable Integer start, @PathVariable Integer end){
                 IResponse<List<Post>> resp = () -> postControllerService.getAllPosts(start, end);
@@ -49,15 +50,16 @@ public class PostController extends AbstractController <Post> {
 
         @RequestMapping (value = Mapping.FindById, method = RequestMethod.GET)
         public @ResponseBody
+        @ResponseStatus(value = HttpStatus.OK)
         WebModel<Post>
-        getPostById (@PathVariable Integer id,HttpServletResponse srvResponse) {
+        getPostById (@PathVariable Integer id) {
                 IResponse<Post> resp = () -> postControllerService.getPost(id);
-                //srvResponse.setStatus(500);
                 return generateBodyResponse(resp,APITags.PostAPITag, APIActions.getPosts);
         }
 
         @RequestMapping (value =  Mapping.GetAll, method = RequestMethod.GET)
         public @ResponseBody
+        @ResponseStatus(value = HttpStatus.OK)
         WebModel<List<Post>>
         getAllPosts () {
                 IResponse<List<Post>> resp = postControllerService::getAllPosts;
@@ -66,8 +68,8 @@ public class PostController extends AbstractController <Post> {
         }
 
         @RequestMapping (value =  Mapping.UpdateById , method = RequestMethod.PUT)
-        @ResponseStatus(HttpStatus.OK)
         public @ResponseBody
+        @ResponseStatus(HttpStatus.OK)
         WebModel<Integer>
         updatePost (@PathVariable Integer id,
                     @RequestParam(value = "Text", required = false) String text,
@@ -96,8 +98,8 @@ public class PostController extends AbstractController <Post> {
         }
 
         @RequestMapping (value = Mapping.DeleteById, method = RequestMethod.DELETE)
-        @ResponseStatus(HttpStatus.OK)
         public @ResponseBody
+        @ResponseStatus(HttpStatus.OK)
         WebModel<Integer>
         deletePost (@PathVariable Integer id) {
                 IResponse<Integer> resp = () -> postControllerService.deletePost(id);
@@ -106,8 +108,8 @@ public class PostController extends AbstractController <Post> {
         }
 
         @RequestMapping (value = Mapping.Insert, method = RequestMethod.POST)
-        @ResponseStatus(HttpStatus.CREATED)
         public @ResponseBody
+        @ResponseStatus(HttpStatus.CREATED)
         WebModel<Integer>
         insertPost (@RequestParam(value = "Text", required = false) String text,
                     @RequestParam(value = "Description", required = false) String desc,
@@ -135,8 +137,8 @@ public class PostController extends AbstractController <Post> {
         }
 
         @RequestMapping (value = Mapping.DownloadImage, method = RequestMethod.GET)
-        @ResponseStatus(HttpStatus.OK)
         @ResponseBody
+        @ResponseStatus(HttpStatus.OK)
         public WebModel<Integer>
         downloadPostImageById (@PathVariable (value="id") Integer post_id, HttpServletResponse response) throws IOException {
                 Post post = postControllerService.getPost(post_id);

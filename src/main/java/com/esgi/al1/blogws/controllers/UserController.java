@@ -3,6 +3,8 @@ package com.esgi.al1.blogws.controllers;
 import com.esgi.al1.blogws.interfaces.IResponse;
 import com.esgi.al1.blogws.models.User;
 import com.esgi.al1.blogws.models.WebModel;
+import com.esgi.al1.blogws.services.AbstractControllerService;
+import com.esgi.al1.blogws.services.PostControllerService;
 import com.esgi.al1.blogws.services.UserControllerService;
 import com.esgi.al1.blogws.utils.DBUtils;
 import com.esgi.al1.blogws.utils.Log;
@@ -26,7 +28,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(value = Mapping.UserAPI)
-public class UserController {
+public class UserController  extends AbstractController<User>{
 
     private final UserControllerService userControllerService;
 
@@ -35,44 +37,38 @@ public class UserController {
         this.userControllerService = userControllerService;
     }
 
-    private <T> WebModel<T> generateResponse(IResponse<T> resp, String apiTag, String action) {
-        IResponse.IWebModelResponse<T> wm = (IResponse<T> arg) ->
-                new WebModelBuilder<T>().
-                        buildAPITag(apiTag).
-                        buildAPIAction(action).
-                        buildContent(arg.getResponse()).
-                        build();
-        return wm.convertResponse(resp);
-    }
-
     @RequestMapping (value = Mapping.GetAll + "/{start}/{end}", method = RequestMethod.GET)
     public @ResponseBody
+    @ResponseStatus(value = HttpStatus.OK)
     WebModel<List<User>>
     getAllUsers (@PathVariable Integer start, @PathVariable Integer end){
         IResponse<List<User>> resp = () -> userControllerService.getAllUsers(start, end);
         Log.i("getting limited Users");
-        return generateResponse(resp, Mapping.APITags.UserAPITag, Mapping.APIActions.getUsers);
+        return generateBodyResponse(resp, Mapping.APITags.UserAPITag, Mapping.APIActions.getUsers);
     }
 
     @RequestMapping (value = Mapping.FindById, method = RequestMethod.GET)
     public @ResponseBody
+    @ResponseStatus(value = HttpStatus.OK)
     WebModel<User>
     getUserById (@PathVariable Integer id) {
         IResponse<User> resp = () -> userControllerService.getUser(id);
-        return generateResponse(resp, Mapping.APITags.UserAPITag, Mapping.APIActions.getUsers);
+        return generateBodyResponse(resp, Mapping.APITags.UserAPITag, Mapping.APIActions.getUsers);
     }
 
     @RequestMapping (value =  Mapping.GetAll, method = RequestMethod.GET)
     public @ResponseBody
+    @ResponseStatus(value = HttpStatus.OK)
     WebModel<List<User>>
     getAllUsers () {
         IResponse<List<User>> resp = userControllerService::getAllUsers;
         Log.i("getting all Users");
-        return generateResponse(resp, Mapping.APITags.UserAPITag, Mapping.APIActions.getUsers);
+        return generateBodyResponse(resp, Mapping.APITags.UserAPITag, Mapping.APIActions.getUsers);
     }
 
     @RequestMapping (value =  Mapping.UpdateById , method = RequestMethod.PUT)
     public @ResponseBody
+    @ResponseStatus(value = HttpStatus.OK)
     WebModel<Integer>
     updateUser (@PathVariable Integer id,
                 @RequestParam(value = "Name", required = false) String name,
@@ -93,20 +89,22 @@ public class UserController {
 
         IResponse<Integer> resp = () -> userControllerService.updateUser(sqlParams, id);
         Log.i("updating User");
-        return generateResponse(resp, Mapping.APITags.UserAPITag, Mapping.APIActions.updateUser);
+        return generateBodyResponse(resp, Mapping.APITags.UserAPITag, Mapping.APIActions.updateUser);
     }
 
     @RequestMapping (value = Mapping.DeleteById, method = RequestMethod.DELETE)
     public @ResponseBody
+    @ResponseStatus(value = HttpStatus.OK)
     WebModel<Integer>
     deleteUser (@PathVariable Integer id) {
         IResponse<Integer> resp = () -> userControllerService.deleteUser(id);
         Log.i("deleting User");
-        return generateResponse(resp, Mapping.APITags.UserAPITag, Mapping.APIActions.deleteUser);
+        return generateBodyResponse(resp, Mapping.APITags.UserAPITag, Mapping.APIActions.deleteUser);
     }
 
     @RequestMapping (value = Mapping.Insert, method = RequestMethod.POST)
     public @ResponseBody
+    @ResponseStatus(value = HttpStatus.CREATED)
     WebModel<Integer>
     insertUser (@RequestParam(value = "Name", required = false) String name,
                 @RequestParam(value = "LastName", required = false) String lastname,
@@ -126,7 +124,7 @@ public class UserController {
 
         IResponse<Integer> resp = () -> userControllerService.insertUser(sqlParams);
         Log.i("inserting User");
-        return generateResponse(resp, Mapping.APITags.UserAPITag, Mapping.APIActions.insertUser);
+        return generateBodyResponse(resp, Mapping.APITags.UserAPITag, Mapping.APIActions.insertUser);
     }
 
     @RequestMapping (value =  Mapping.DownloadImage, method = RequestMethod.GET)
@@ -147,7 +145,7 @@ public class UserController {
             os.write(User.getBinaryContent());
             os.flush();
         }
-        return generateResponse(() -> imgLength, Mapping.APITags.UserAPITag, Mapping.APIActions.downloadImage);
+        return generateBodyResponse(() -> imgLength, Mapping.APITags.UserAPITag, Mapping.APIActions.downloadImage);
     }
     
     

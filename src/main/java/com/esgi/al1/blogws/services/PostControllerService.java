@@ -1,10 +1,9 @@
 package com.esgi.al1.blogws.services;
 
 import com.esgi.al1.blogws.dao.PostRepository;
-import com.esgi.al1.blogws.interfaces.IPostControllerService;
-import com.esgi.al1.blogws.interfaces.IPostRepository;
 import com.esgi.al1.blogws.models.Post;
-import com.esgi.al1.blogws.utils.*;
+import com.esgi.al1.blogws.utils.GeneratedQuery;
+import com.esgi.al1.blogws.utils.Queries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,51 +11,44 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by Romaaan on 19/03/2017.
- * comitted by Mokrane
+ * Created by Romaaan on 26/03/2017.
  */
-//Grosse usine à gaz
-
 @Service
-public class PostControllerService implements IPostControllerService {
+public class PostControllerService extends AbstractControllerService<Post>  {
 
-    private final IPostRepository postRepository;
 
     @Autowired
     public PostControllerService(PostRepository postRepository, Queries queries) {
-        this.postRepository = postRepository;
+        super(postRepository, queries);
     }
 
-    @Override
     public List<Post> getAllPosts() {
-        return postRepository.getAll();
+        return repository.getAll(queries.GetAllPosts);
     }
 
-    @Override
+
     public Post getPost(int id) {
-       return postRepository.getPostById(id);
+        return repository.get(queries.GetPost, id);
     }
 
-    @Override
+
     public List<Post> getAllPosts(int start, int end) {
-        return postRepository.getAllByLimit(start, end);
+        return repository.getAll(queries.GetAllPostsLimit, start,end);
     }
 
-    @Override
     public int updatePost(HashMap<String, Object> sqlParams, int id) {
-        GeneratedStatement gst = DBUtils.generateUpdateStatement(sqlParams);
-        return postRepository.updatePost(gst, id);
+        GeneratedQuery gq = updateGenerator.generate(sqlParams);
+        String query = String.format(queries.UpdatePost + "%s %s", gq.getParamStr(), queries.WherePostId);
+        return repository.updateOrDelete(query, gq.getParamArr(), id);
     }
 
-    @Override
     public int deletePost(int id) {
-        return postRepository.deletePost(id);
+        return repository.updateOrDelete(queries.DeletePost, id);
     }
 
-    @Override
     public int insertPost(HashMap<String, Object> sqlParams) {
-        GeneratedStatement gst = DBUtils.generateInsertStatement(sqlParams);
-        return postRepository.insertPost(gst);
+        GeneratedQuery gq = insertGenerator.generate(sqlParams);
+        String query = String.format(queries.InsertPost + "%s", gq.getParamStr());
+        return repository.insert(query, gq.getParamArr());
     }
-
 }

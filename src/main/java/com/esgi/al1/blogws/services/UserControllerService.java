@@ -1,11 +1,8 @@
 package com.esgi.al1.blogws.services;
 
 import com.esgi.al1.blogws.dao.UserRepository;
-import com.esgi.al1.blogws.interfaces.IUserRepository;
-import com.esgi.al1.blogws.interfaces.IUserService;
 import com.esgi.al1.blogws.models.User;
-import com.esgi.al1.blogws.utils.DBUtils;
-import com.esgi.al1.blogws.utils.GeneratedStatement;
+import com.esgi.al1.blogws.utils.GeneratedQuery;
 import com.esgi.al1.blogws.utils.Queries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,44 +14,38 @@ import java.util.List;
  * Created by Romaaan on 25/03/2017.
  */
 @Service
-public class UserControllerService implements IUserService {
-
-    private final IUserRepository userRepository;
+public class UserControllerService extends AbstractControllerService<User>{
 
     @Autowired
     public UserControllerService(UserRepository userRepository, Queries queries) {
-        this.userRepository = userRepository;
+        super(userRepository, queries);
     }
 
-    @Override
     public List<User> getAllUsers() {
-        return userRepository.getAll();
+        return repository.getAll(queries.GetAllUsers);
     }
 
-    @Override
     public User getUser(int id) {
-        return userRepository.getUserById(id);
+        return repository.get(queries.GetUser, id);
     }
 
-    @Override
     public List<User> getAllUsers(int start, int end) {
-        return userRepository.getAllByLimit(start, end);
+        return repository.getAll(queries.GetAllUsersLimit, start,end);
     }
 
-    @Override
     public int updateUser(HashMap<String, Object> sqlParams, int id) {
-        GeneratedStatement gst = DBUtils.generateUpdateStatement(sqlParams);
-        return userRepository.updateUser(gst, id);
+        GeneratedQuery generatedQuery = updateGenerator.generate(sqlParams);
+        String query = String.format(queries.UpdateUser + "%s %s", generatedQuery.getParamStr(), queries.WhereUserId);
+        return repository.updateOrDelete(query, generatedQuery.getParamArr(), id);
     }
 
-    @Override
     public int deleteUser(int id) {
-        return userRepository.deleteUser(id);
+        return repository.updateOrDelete(queries.DeleteUser, id);
     }
 
-    @Override
     public int insertUser(HashMap<String, Object> sqlParams) {
-        GeneratedStatement gst = DBUtils.generateInsertStatement(sqlParams);
-        return userRepository.insertUser(gst);
+        GeneratedQuery generatedQuery = insertGenerator.generate(sqlParams);
+        String query = String.format(queries.InsertUser + "%s", generatedQuery.getParamStr());
+        return repository.insert(query, generatedQuery.getParamArr());
     }
 }

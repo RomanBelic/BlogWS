@@ -1,7 +1,6 @@
 package com.esgi.al1.blogws.controllers;
 
 import com.esgi.al1.blogws.interfaces.IResponse;
-import com.esgi.al1.blogws.interfaces.IUserService;
 import com.esgi.al1.blogws.models.User;
 import com.esgi.al1.blogws.models.WebModel;
 import com.esgi.al1.blogws.services.UserControllerService;
@@ -29,7 +28,7 @@ import java.util.List;
 @RequestMapping(value = Mapping.UserAPI)
 public class UserController {
 
-    private final IUserService userControllerService;
+    private final UserControllerService userControllerService;
 
     @Autowired
     public UserController(UserControllerService userControllerService) {
@@ -49,7 +48,7 @@ public class UserController {
     @RequestMapping (value = Mapping.GetAll + "/{start}/{end}", method = RequestMethod.GET)
     public @ResponseBody
     WebModel<List<User>>
-    getAllUsers ( int start, int end){
+    getAllUsers (@PathVariable Integer start, @PathVariable Integer end){
         IResponse<List<User>> resp = () -> userControllerService.getAllUsers(start, end);
         Log.i("getting limited Users");
         return generateResponse(resp, Mapping.APITags.UserAPITag, Mapping.APIActions.getUsers);
@@ -88,7 +87,7 @@ public class UserController {
         if (lastname != null) sqlParams.put(UserTable.Columns.LastName.getName(), lastname);
         if (idType != null) sqlParams.put(UserTable.Columns.IdType.getName(), idType);
         if (dateCreated != null) sqlParams.put(UserTable.Columns.DateCreated.getName(), dateCreated);
-        if (name != null) sqlParams.put(UserTable.Columns.FileName.getName(), fileName);
+        if (fileName != null) sqlParams.put(UserTable.Columns.FileName.getName(), fileName);
         byte[] binaryContent = DBUtils.ConvertInputStream(request.getInputStream());
         if (binaryContent.length > 0) sqlParams.put(UserTable.Columns.BinaryContent.getName(), binaryContent);
 
@@ -121,7 +120,7 @@ public class UserController {
         if (lastname != null) sqlParams.put(UserTable.Columns.LastName.getName(), lastname);
         if (idType != null) sqlParams.put(UserTable.Columns.IdType.getName(), idType);
         if (dateCreated != null) sqlParams.put(UserTable.Columns.DateCreated.getName(), dateCreated);
-        if (name != null) sqlParams.put(UserTable.Columns.FileName.getName(), fileName);
+        if (fileName != null) sqlParams.put(UserTable.Columns.FileName.getName(), fileName);
         byte[] binaryContent = DBUtils.ConvertInputStream(request.getInputStream());
         if (binaryContent.length > 0) sqlParams.put(UserTable.Columns.BinaryContent.getName(), binaryContent);
 

@@ -10,7 +10,7 @@ public final class DataBase {
 
     private final DataTable postTable = new PostTable("post","p");
 
-    private final DataTable userTable = new PostTable("user","u");
+    private final DataTable userTable = new UserTable("user","u");
 
     public DataBase(String name) {
         this.name = name;

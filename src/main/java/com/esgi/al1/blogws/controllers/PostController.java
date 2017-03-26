@@ -3,7 +3,6 @@ import com.esgi.al1.blogws.controllers.Mapping.APITags;
 import com.esgi.al1.blogws.controllers.Mapping.APIActions;
 import com.esgi.al1.blogws.interfaces.IResponse;
 import com.esgi.al1.blogws.interfaces.IResponse.IWebModelResponse;
-import com.esgi.al1.blogws.interfaces.IPostControllerService;
 import com.esgi.al1.blogws.models.Post;
 import com.esgi.al1.blogws.models.WebModel;
 import com.esgi.al1.blogws.services.PostControllerService;
@@ -28,7 +27,7 @@ import java.util.List;
 @RequestMapping (value = Mapping.PostAPI)
 public class PostController {
 
-        private final IPostControllerService postControllerService;
+        private final PostControllerService postControllerService;
 
         @Autowired
         public PostController(PostControllerService postControllerService) {
@@ -48,7 +47,7 @@ public class PostController {
         @RequestMapping (value = Mapping.GetAll + "/{start}/{end}", method = RequestMethod.GET)
         public @ResponseBody
         WebModel<List<Post>>
-        getAllPosts ( int start, int end){
+        getAllPosts (@PathVariable Integer start, @PathVariable Integer end){
                 IResponse<List<Post>> resp = () -> postControllerService.getAllPosts(start, end);
                 Log.i("getting limited posts");
                 return generateResponse(resp, APITags.PostAPITag, APIActions.getPosts);
@@ -91,7 +90,7 @@ public class PostController {
                 if (date != null) sqlParams.put(PostTable.Columns.Date.getName(), date);
                 if (tags != null) sqlParams.put(PostTable.Columns.Tags.getName(), tags);
                 if (title != null) sqlParams.put(PostTable.Columns.Title.getName(), title);
-                if (text != null) sqlParams.put(PostTable.Columns.FileName.getName(), fileName);
+                if (fileName != null) sqlParams.put(PostTable.Columns.FileName.getName(), fileName);
                 byte[] binaryContent = DBUtils.ConvertInputStream(request.getInputStream());
                 if (binaryContent.length > 0) sqlParams.put(PostTable.Columns.BinaryContent.getName(), binaryContent);
 

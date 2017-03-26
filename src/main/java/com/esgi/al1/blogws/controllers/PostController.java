@@ -5,12 +5,16 @@ import com.esgi.al1.blogws.interfaces.IResponse;
 import com.esgi.al1.blogws.interfaces.IResponse.IWebModelResponse;
 import com.esgi.al1.blogws.models.Post;
 import com.esgi.al1.blogws.models.WebModel;
+import com.esgi.al1.blogws.services.AbstractControllerService;
 import com.esgi.al1.blogws.services.PostControllerService;
 import com.esgi.al1.blogws.utils.*;
+import org.apache.http.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.*;
+import sun.security.provider.certpath.OCSPResponse;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,7 +29,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping (value = Mapping.PostAPI)
-public class PostController {
+public class PostController extends AbstractController <Post> {
 
         private final PostControllerService postControllerService;
 
@@ -34,31 +38,22 @@ public class PostController {
                 this.postControllerService = postControllerService;
         }
 
-        private <T> WebModel<T> generateResponse(IResponse<T> resp, String apiTag, String action) {
-                IWebModelResponse<T> wm = (IResponse<T> arg) ->
-                        new WebModelBuilder<T>().
-                                buildAPITag(apiTag).
-                                buildAPIAction(action).
-                                buildContent(arg.getResponse()).
-                                build();
-                return wm.convertResponse(resp);
-        }
-
         @RequestMapping (value = Mapping.GetAll + "/{start}/{end}", method = RequestMethod.GET)
         public @ResponseBody
         WebModel<List<Post>>
         getAllPosts (@PathVariable Integer start, @PathVariable Integer end){
                 IResponse<List<Post>> resp = () -> postControllerService.getAllPosts(start, end);
                 Log.i("getting limited posts");
-                return generateResponse(resp, APITags.PostAPITag, APIActions.getPosts);
+                return generateBodyResponse(resp, APITags.PostAPITag, APIActions.getPosts);
         }
 
         @RequestMapping (value = Mapping.FindById, method = RequestMethod.GET)
         public @ResponseBody
         WebModel<Post>
-        getPostById (@PathVariable Integer id) {
+        getPostById (@PathVariable Integer id,HttpServletResponse srvResponse) {
                 IResponse<Post> resp = () -> postControllerService.getPost(id);
-                return generateResponse(resp,APITags.PostAPITag, APIActions.getPosts);
+                //srvResponse.setStatus(500);
+                return generateBodyResponse(resp,APITags.PostAPITag, APIActions.getPosts);
         }
 
         @RequestMapping (value =  Mapping.GetAll, method = RequestMethod.GET)
@@ -67,10 +62,11 @@ public class PostController {
         getAllPosts () {
                 IResponse<List<Post>> resp = postControllerService::getAllPosts;
                 Log.i("getting all posts");
-                return generateResponse(resp, APITags.PostAPITag, APIActions.getPosts);
+                return generateBodyResponse(resp, APITags.PostAPITag, APIActions.getPosts);
         }
 
         @RequestMapping (value =  Mapping.UpdateById , method = RequestMethod.PUT)
+        @ResponseStatus(HttpStatus.OK)
         public @ResponseBody
         WebModel<Integer>
         updatePost (@PathVariable Integer id,
@@ -96,19 +92,21 @@ public class PostController {
 
                 IResponse<Integer> resp = () -> postControllerService.updatePost(sqlParams, id);
                 Log.i("updating post");
-                return generateResponse(resp,APITags.PostAPITag, APIActions.updatePost);
+                return generateBodyResponse(resp, APITags.PostAPITag, APIActions.updatePost);
         }
 
         @RequestMapping (value = Mapping.DeleteById, method = RequestMethod.DELETE)
+        @ResponseStatus(HttpStatus.OK)
         public @ResponseBody
         WebModel<Integer>
         deletePost (@PathVariable Integer id) {
                 IResponse<Integer> resp = () -> postControllerService.deletePost(id);
                 Log.i("deleting post");
-                return generateResponse(resp,APITags.PostAPITag, APIActions.deletePost);
+                return generateBodyResponse(resp,APITags.PostAPITag, APIActions.deletePost);
         }
 
         @RequestMapping (value = Mapping.Insert, method = RequestMethod.POST)
+        @ResponseStatus(HttpStatus.CREATED)
         public @ResponseBody
         WebModel<Integer>
         insertPost (@RequestParam(value = "Text", required = false) String text,
@@ -133,7 +131,7 @@ public class PostController {
 
                 IResponse<Integer> resp = () -> postControllerService.insertPost(sqlParams);
                 Log.i("inserting post");
-                return generateResponse(resp,APITags.PostAPITag, APIActions.insertPost);
+                return generateBodyResponse(resp,APITags.PostAPITag, APIActions.insertPost);
         }
 
         @RequestMapping (value = Mapping.DownloadImage, method = RequestMethod.GET)
@@ -154,6 +152,6 @@ public class PostController {
                         os.write(post.getBinaryContent());
                         os.flush();
                 }
-                return generateResponse(() -> imgLength, APITags.PostAPITag, APIActions.downloadImage);
+                return generateBodyResponse(() -> imgLength, APITags.PostAPITag, APIActions.downloadImage);
         }
 }

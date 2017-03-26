@@ -3,16 +3,14 @@ package com.esgi.al1.blogws.controllers;
 import com.esgi.al1.blogws.interfaces.IResponse;
 import com.esgi.al1.blogws.models.User;
 import com.esgi.al1.blogws.models.WebModel;
-import com.esgi.al1.blogws.services.AbstractControllerService;
-import com.esgi.al1.blogws.services.PostControllerService;
 import com.esgi.al1.blogws.services.UserControllerService;
 import com.esgi.al1.blogws.utils.DBUtils;
 import com.esgi.al1.blogws.utils.Log;
 import com.esgi.al1.blogws.utils.UserTable;
-import com.esgi.al1.blogws.utils.WebModelBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -147,6 +145,25 @@ public class UserController  extends AbstractController<User>{
         }
         return generateBodyResponse(() -> imgLength, Mapping.APITags.UserAPITag, Mapping.APIActions.downloadImage);
     }
-    
+
+    @RequestMapping (value = Mapping.ShowImage, method = RequestMethod.GET)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    public WebModel<Integer>
+    showPostImageById (@PathVariable (value="id") Integer user_id, HttpServletResponse response) throws IOException {
+        User user = userControllerService.getUser(user_id);
+        int imgLength = user.getBinaryContent().length;
+        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+        response.setContentLength(imgLength);
+        response.setDateHeader("Expires", 0);
+        response.addHeader("Cache-Control", "no-store");
+        response.addHeader("Pragma", "no-cache");
+        response.addHeader("Date", new Date().toString());
+        try (OutputStream os = response.getOutputStream()) {
+            os.write(user.getBinaryContent());
+            os.flush();
+        }
+        return generateBodyResponse(() -> imgLength, Mapping.APITags.UserAPITag, Mapping.APIActions.downloadImage);
+    }
     
 }

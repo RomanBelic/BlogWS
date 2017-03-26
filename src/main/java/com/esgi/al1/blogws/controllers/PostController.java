@@ -2,19 +2,15 @@ package com.esgi.al1.blogws.controllers;
 import com.esgi.al1.blogws.controllers.Mapping.APITags;
 import com.esgi.al1.blogws.controllers.Mapping.APIActions;
 import com.esgi.al1.blogws.interfaces.IResponse;
-import com.esgi.al1.blogws.interfaces.IResponse.IWebModelResponse;
 import com.esgi.al1.blogws.models.Post;
 import com.esgi.al1.blogws.models.WebModel;
-import com.esgi.al1.blogws.services.AbstractControllerService;
 import com.esgi.al1.blogws.services.PostControllerService;
 import com.esgi.al1.blogws.utils.*;
-import org.apache.http.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.*;
-import sun.security.provider.certpath.OCSPResponse;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -144,12 +140,32 @@ public class PostController extends AbstractController <Post> {
                 Post post = postControllerService.getPost(post_id);
                 int imgLength = post.getBinaryContent().length;
                 long timeNow = Date.from(new Date().toInstant()).getTime();
-                response.addHeader("Content-Disposition", "attachment; filename=" + timeNow + "_" + post.getFileName());
-                response.addHeader("Content-Length", String.valueOf(imgLength));
+                response.setContentLength(imgLength);
+                response.setDateHeader("Expires", 0);
+                response.setContentType(MediaType.IMAGE_JPEG_VALUE);
                 response.addHeader("Cache-Control", "no-store");
                 response.addHeader("Pragma", "no-cache");
+                response.addHeader("Content-Disposition", "attachment; filename=" + timeNow + "_" + post.getFileName());
+                try (OutputStream os = response.getOutputStream()) {
+                        os.write(post.getBinaryContent());
+                        os.flush();
+                }
+                return generateBodyResponse(() -> imgLength, APITags.PostAPITag, APIActions.downloadImage);
+        }
+
+        @RequestMapping (value = Mapping.ShowImage, method = RequestMethod.GET)
+        @ResponseBody
+        @ResponseStatus(HttpStatus.OK)
+        public WebModel<Integer>
+        showPostImageById (@PathVariable (value="id") Integer post_id, HttpServletResponse response) throws IOException {
+                Post post = postControllerService.getPost(post_id);
+                int imgLength = post.getBinaryContent().length;
+                response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+                response.setContentLength(imgLength);
                 response.setDateHeader("Expires", 0);
-                response.setContentType("image/jpeg");
+                response.addHeader("Cache-Control", "no-store");
+                response.addHeader("Pragma", "no-cache");
+                response.addHeader("Date", new Date().toString());
                 try (OutputStream os = response.getOutputStream()) {
                         os.write(post.getBinaryContent());
                         os.flush();

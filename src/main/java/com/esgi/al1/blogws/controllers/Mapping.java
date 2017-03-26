@@ -14,6 +14,7 @@ class Mapping {
     public static final String DeleteById = "/Delete/{id}";
     public static final String Insert = "/Insert";
     public static final String DownloadImage = "/DownloadImage/{id}";
+    public static final String ShowImage = "/ShowImage/{id}";
 
     public static class APITags {
         public static final String PostAPITag = "PostAPI";

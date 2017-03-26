@@ -3,7 +3,6 @@ package com.esgi.al1.blogws.services;
 import com.esgi.al1.blogws.dao.AbstractRepository;
 import com.esgi.al1.blogws.interfaces.IGenerateParametrizedQuery;
 import com.esgi.al1.blogws.utils.GeneratedQuery;
-import com.esgi.al1.blogws.utils.Log;
 import com.esgi.al1.blogws.utils.Queries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

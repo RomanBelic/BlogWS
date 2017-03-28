@@ -2,6 +2,7 @@ package com.esgi.al1.blogws;
 
 import com.esgi.al1.blogws.dao.PostRepository;
 import com.esgi.al1.blogws.models.Post;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +27,11 @@ public class PostRepositoryIT {
 
     @Autowired
     PostRepository postRepository;
+    Post post;
 
-
-    @Test
-    public void should_get_post_data_by_id(){
-        Post post = new Post();
+    @Before
+    public void init(){
+        post = new Post();
         post.setDate(new Date(2017, 03, 27));
         post.setAuthorId(123);
         post.setId(1);
@@ -40,16 +41,39 @@ public class PostRepositoryIT {
         post.setBinaryContent(new byte[20]);
         post.setText("Post text");
         post.setFileName("postFile.txt");
+    }
 
-        Post queryPost = postRepository.get("SELECT * FROM Post "+
+    @Test
+    public void should_get_post_data_by_id(){
+                Post queryPost = postRepository.get("SELECT * FROM Post "+
                 "WHERE Id="+post.getId());
 
         assertThat(queryPost.getId()).isEqualTo(post.getId());
     }
 
     @Test
+    public void should_insert_post(){
+        String query = "INSERT INTO Post VALUES "+
+                "("
+                    +post.getId()+","
+                    +post.getDate()+","
+                    +post.getAuthorId()+","
+                    +post.getTitle()+","
+                    +post.getDescription()+","
+                    +post.getTags() +","
+                    +post.getBinaryContent()+","
+                    +post.getText()+","
+                    +post.getFileName()+
+                ")";
+        int queryPost = postRepository.insert(query);
+
+        assertThat(queryPost).isEqualTo(post.getId());
+    }
+
+    @Test
     public void should_get_all(){
 
     }
+
 
 }

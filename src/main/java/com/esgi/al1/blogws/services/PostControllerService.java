@@ -26,11 +26,9 @@ public class PostControllerService extends AbstractControllerService<Post>  {
         return repository.getAll(queries.GetAllPosts);
     }
 
-
     public Post getPost(int id) {
         return repository.get(queries.GetPost, id);
     }
-
 
     public List<Post> getAllPosts(int start, int end) {
         return repository.getAll(queries.GetAllPostsLimit, start,end);

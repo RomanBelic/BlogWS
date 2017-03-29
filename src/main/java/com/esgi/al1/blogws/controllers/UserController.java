@@ -26,7 +26,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(value = Mapping.UserAPI)
-public class UserController  extends AbstractController<User>{
+public class UserController  extends AbstractController{
 
     private final UserControllerService userControllerService;
 
@@ -130,17 +130,17 @@ public class UserController  extends AbstractController<User>{
     @ResponseBody
     public WebModel<Integer>
     downloadUserImageById (@PathVariable (value="id") Integer User_id, HttpServletResponse response) throws IOException {
-        User User = userControllerService.getUser(User_id);
-        int imgLength = User.getBinaryContent().length;
+        User user = userControllerService.getUser(User_id);
+        int imgLength = user.getBinaryContent().length;
         long timeNow = Date.from(new Date().toInstant()).getTime();
-        response.addHeader("Content-Disposition", "attachment; filename=" + timeNow + "_" + User.getFileName());
+        response.addHeader("Content-Disposition", "attachment; filename=" + timeNow + "_" + user.getFileName());
         response.addHeader("Content-Length", String.valueOf(imgLength));
         response.addHeader("Cache-Control", "no-store");
         response.addHeader("Pragma", "no-cache");
         response.setDateHeader("Expires", 0);
         response.setContentType("image/jpeg");
         try (OutputStream os = response.getOutputStream()) {
-            os.write(User.getBinaryContent());
+            os.write(user.getBinaryContent());
             os.flush();
         }
         return generateBodyResponse(() -> imgLength, Mapping.APITags.UserAPITag, Mapping.APIActions.downloadImage);
@@ -150,7 +150,7 @@ public class UserController  extends AbstractController<User>{
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public WebModel<Integer>
-    showPostImageById (@PathVariable (value="id") Integer user_id, HttpServletResponse response) throws IOException {
+    showUserImageById (@PathVariable (value="id") Integer user_id, HttpServletResponse response) throws IOException {
         User user = userControllerService.getUser(user_id);
         int imgLength = user.getBinaryContent().length;
         response.setContentType(MediaType.IMAGE_JPEG_VALUE);

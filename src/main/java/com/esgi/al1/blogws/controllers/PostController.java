@@ -25,7 +25,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping (value = Mapping.PostAPI)
-public class PostController extends AbstractController <Post> {
+public class PostController extends AbstractController {
 
         private final PostControllerService postControllerService;
 

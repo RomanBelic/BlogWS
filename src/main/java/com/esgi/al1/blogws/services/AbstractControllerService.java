@@ -19,6 +19,12 @@ public abstract class AbstractControllerService<T> {
     protected final AbstractRepository<T> repository;
     protected final Queries queries;
 
+    @Autowired
+    public AbstractControllerService(AbstractRepository<T> repository, Queries queries) {
+        this.repository = repository;
+        this.queries = queries;
+    }
+
     protected final IGenerateParametrizedQuery updateGenerator = (HashMap<String, Object> sqlParams)-> {
         Object[] paramArr = new Object[sqlParams.size()];
         String updStr = "";
@@ -58,9 +64,4 @@ public abstract class AbstractControllerService<T> {
         return new GeneratedQuery(insCols.concat(insVals), paramArr);
     };
 
-    @Autowired
-    public AbstractControllerService(AbstractRepository<T> repository, Queries queries) {
-        this.repository = repository;
-        this.queries = queries;
-    }
 }

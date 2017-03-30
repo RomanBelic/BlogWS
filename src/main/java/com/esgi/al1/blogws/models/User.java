@@ -82,4 +82,14 @@ public class User {
         this.type = type;
     }
 
+    @Override
+    public int hashCode() {
+        return new Integer(id).hashCode() + new Integer(idType).hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof User && ((User)obj).id == this.id);
+    }
+
 }

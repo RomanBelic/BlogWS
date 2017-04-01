@@ -18,6 +18,9 @@ public class Post implements Serializable {
      private String text;
      private String FileName;
 
+    public Post(Date todayDate, int authorId, int id, String description, String tags, byte[] arr, String text, String fileName) {
+    }
+
     public String getFileName() {
         return FileName;
     }

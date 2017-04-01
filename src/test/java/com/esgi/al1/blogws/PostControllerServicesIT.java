@@ -17,9 +17,4 @@ public class PostControllerServicesIT {
     }
 
 
-
-    @Test
-    public void should_create_post(){
-
-    }
 }

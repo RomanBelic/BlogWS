@@ -2,6 +2,8 @@ package com.esgi.al1.blogws;
 
 import com.esgi.al1.blogws.dao.PostRepository;
 import com.esgi.al1.blogws.models.Post;
+import com.esgi.al1.blogws.utils.DataBase;
+import com.esgi.al1.blogws.utils.Queries;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,60 +20,19 @@ import java.util.Date;
  * Created by Chris GAGOUDE on 21/03/2017.
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = PostRepository.class)
+@SpringBootTest
 @ActiveProfiles("Test")
 @DataJpaTest
 public class PostRepositoryIT {
 
     @Autowired
     PostRepository postRepository;
-    Post post;
 
-    @Before
     public void init(){
-        post = new Post();
-        post.setDate(new Date(2017, 03, 27));
-        post.setAuthorId(123);
-        post.setId(1);
-        post.setTitle("First post");
-        post.setDescription("Our first post for testing purposes.");
-        post.setTags(" ");
-        post.setBinaryContent(new byte[20]);
-        post.setText("Post text");
-        post.setFileName("postFile.txt");
     }
 
     @Test
-    public void should_get_post_data_by_id(){
-                Post queryPost = postRepository.get("SELECT * FROM Post "+
-                "WHERE Id="+post.getId());
-
-        assertThat(queryPost.getId()).isEqualTo(post.getId());
-    }
-
-    @Test
-    public void should_insert_post(){
-        String query = "INSERT INTO Post VALUES "+
-                "("
-                    +post.getId()+","
-                    +post.getDate()+","
-                    +post.getAuthorId()+","
-                    +post.getTitle()+","
-                    +post.getDescription()+","
-                    +post.getTags() +","
-                    +post.getBinaryContent()+","
-                    +post.getText()+","
-                    +post.getFileName()+
-                ")";
-        int queryPost = postRepository.insert(query);
-
-        assertThat(queryPost).isEqualTo(post.getId());
-    }
-
-    @Test
-    public void should_get_all(){
+    public void should_get_post_data(){
 
     }
-
-
 }

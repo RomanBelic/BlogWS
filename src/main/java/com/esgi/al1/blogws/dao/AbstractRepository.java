@@ -18,11 +18,13 @@ import java.util.*;
 public abstract class AbstractRepository<T> {
 
     protected IResultReader<T> rsReader = (ResultSet rs) -> null;
+
     private final MySqlConnector connector;
 
     protected void setRsReader (IResultReader<T> rsReader){
         this.rsReader = rsReader;
     }
+
     @Autowired
     public AbstractRepository(MySqlConnector connector) {
         this.connector = connector;
@@ -124,6 +126,5 @@ public abstract class AbstractRepository<T> {
         }
         return id;
     }
-
 
 }

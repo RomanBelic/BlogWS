@@ -3,7 +3,6 @@ package com.esgi.al1.blogws;
 import com.esgi.al1.blogws.models.Post;
 import com.esgi.al1.blogws.models.PostDTO;
 import com.jayway.restassured.RestAssured;
-import com.jayway.restassured.http.ContentType;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;

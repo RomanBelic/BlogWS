@@ -14,8 +14,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Date;
 
-import static org.junit.Assert.*;
-
 /**
  * Created by Chris GAGOUDE on 21/03/2017.
  */

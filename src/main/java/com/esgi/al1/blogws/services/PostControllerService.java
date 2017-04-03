@@ -16,7 +16,6 @@ import java.util.List;
 @Service
 public class PostControllerService extends AbstractControllerService<Post>  {
 
-
     @Autowired
     public PostControllerService(PostRepository postRepository, Queries queries) {
         super(postRepository, queries);

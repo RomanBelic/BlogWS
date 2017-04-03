@@ -6,6 +6,7 @@ import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 
 import javax.annotation.PostConstruct;
+import java.util.Calendar;
 
 /**
  * Created by Romaaan on 18/03/2017.
@@ -17,6 +18,7 @@ public class Settings {
 
     public static final String ProductionProfile = "Production";
     public static final String TestProfile = "Test";
+    public static final Calendar startTime = Calendar.getInstance();
 
     private final Environment env;
 

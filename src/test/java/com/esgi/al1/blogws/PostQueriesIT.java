@@ -1,6 +1,5 @@
 package com.esgi.al1.blogws;
 
-import com.esgi.al1.blogws.models.Post;
 import com.esgi.al1.blogws.utils.DataBase;
 import com.esgi.al1.blogws.utils.Queries;
 import org.junit.Before;
@@ -63,8 +62,8 @@ public class PostQueriesIT {
 
     @Test
     public void should_update_all_posts(){
-        String updateAllPosts = queries.UpdateAllPosts; //Update all posts
-        assertThat(updateAllPosts != null);
+        /*String updateAllPosts = queries.UpdateAllPosts; //Update all posts
+        assertThat(updateAllPosts != null);*/
     }
 
     @Test
@@ -75,7 +74,7 @@ public class PostQueriesIT {
 
     @Test
     public void should_delete_all_posts_from_the_postTable(){
-        String deleteAllPosts = queries.DeleteAllPost;  // DeleteAllPosts from the table
-        assertThat(deleteAllPosts != null);
+        /*String deleteAllPosts = queries.DeleteAllPost;  // DeleteAllPosts from the table
+        assertThat(deleteAllPosts != null);*/
     }
 }

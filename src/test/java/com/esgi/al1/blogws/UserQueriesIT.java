@@ -62,8 +62,8 @@ public class UserQueriesIT {
 
     @Test
     public void should_update_all_users(){
-        String updateAllUsers = queries.UpdateAllUser; //Update all users
-        assertThat(updateAllUsers != null);
+        /*String updateAllUsers = queries.UpdateAllUser; //Update all users
+        assertThat(updateAllUsers != null);*/
     }
 
     @Test
@@ -74,7 +74,7 @@ public class UserQueriesIT {
 
     @Test
     public void delete_all_users_from_the_userTable(){
-        String deleteAllUsers = queries.DeleteAllUser;  // DeleteAllUsers from the table
-        assertThat(deleteAllPosts != null);
+        /*String deleteAllUsers = queries.DeleteAllUser;  // DeleteAllUsers from the table
+        assertThat(deleteAllPosts != null);*/
     }
 }

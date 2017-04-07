@@ -3,7 +3,6 @@ package com.esgi.al1.blogws;
 import com.esgi.al1.blogws.dao.PostRepository;
 import com.esgi.al1.blogws.models.Post;
 import com.esgi.al1.blogws.utils.Queries;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
 
 import java.util.Date;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**

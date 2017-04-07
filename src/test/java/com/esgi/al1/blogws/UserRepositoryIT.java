@@ -1,8 +1,6 @@
 package com.esgi.al1.blogws;
 
-import com.esgi.al1.blogws.dao.PostRepository;
 import com.esgi.al1.blogws.dao.UserRepository;
-import com.esgi.al1.blogws.models.Post;
 import com.esgi.al1.blogws.models.UserType;
 import com.esgi.al1.blogws.utils.Queries;
 import org.junit.Test;
@@ -46,8 +44,8 @@ public class UserRepositoryIT {
         user.setId(2);
         user.setId(2);
         user.setDateCreated(new Date());
-        user.getName("Junior");
-        user.getLastName("Neymar");
+        user.setName("Junior");
+        user.setLastName("Neymar");
         user.setType(UserType.User);
     }
 

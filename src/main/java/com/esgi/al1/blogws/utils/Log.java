@@ -11,11 +11,11 @@ public class Log {
     private static final Logger logger = LoggerFactory.getLogger(Log.class);
 
     public static void err(String msg, Object...args){
-        logger.error(msg,args);
+        logger.error(String.format(msg,args));
     }
 
     public static void i(String msg, Object...args){
-        logger.info(msg,args);
+        logger.info(String.format(msg,args));
     }
 
 }

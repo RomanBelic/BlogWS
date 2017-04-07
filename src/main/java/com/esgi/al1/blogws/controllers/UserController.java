@@ -40,7 +40,7 @@ public class UserController  extends AbstractController{
     @ResponseStatus(value = HttpStatus.OK)
     WebModel<List<User>>
     getAllUsers (@PathVariable Integer start, @PathVariable Integer end){
-        IResponse<List<User>> resp = () -> userControllerService.getAllUsers(start, end);
+        IResponse<List<User>> resp = () -> userControllerService.getAllLimit(start, end);
         Log.i("getting limited Users");
         return generateBodyResponse(resp, Mapping.APITags.UserAPITag, Mapping.APIActions.getUsers);
     }
@@ -50,7 +50,7 @@ public class UserController  extends AbstractController{
     @ResponseStatus(value = HttpStatus.OK)
     WebModel<User>
     getUserById (@PathVariable Integer id) {
-        IResponse<User> resp = () -> userControllerService.getUser(id);
+        IResponse<User> resp = () -> userControllerService.get(id);
         return generateBodyResponse(resp, Mapping.APITags.UserAPITag, Mapping.APIActions.getUsers);
     }
 
@@ -59,7 +59,7 @@ public class UserController  extends AbstractController{
     @ResponseStatus(value = HttpStatus.OK)
     WebModel<List<User>>
     getAllUsers () {
-        IResponse<List<User>> resp = userControllerService::getAllUsers;
+        IResponse<List<User>> resp = userControllerService::getAll;
         Log.i("getting all Users");
         return generateBodyResponse(resp, Mapping.APITags.UserAPITag, Mapping.APIActions.getUsers);
     }
@@ -85,7 +85,7 @@ public class UserController  extends AbstractController{
         byte[] binaryContent = DBUtils.ConvertInputStream(request.getInputStream());
         if (binaryContent.length > 0) sqlParams.put(UserTable.Columns.BinaryContent.getName(), binaryContent);
 
-        IResponse<Integer> resp = () -> userControllerService.updateUser(sqlParams, id);
+        IResponse<Integer> resp = () -> userControllerService.update(sqlParams, id);
         Log.i("updating User");
         return generateBodyResponse(resp, Mapping.APITags.UserAPITag, Mapping.APIActions.updateUser);
     }
@@ -95,7 +95,7 @@ public class UserController  extends AbstractController{
     @ResponseStatus(value = HttpStatus.OK)
     WebModel<Integer>
     deleteUser (@PathVariable Integer id) {
-        IResponse<Integer> resp = () -> userControllerService.deleteUser(id);
+        IResponse<Integer> resp = () -> userControllerService.delete(id);
         Log.i("deleting User");
         return generateBodyResponse(resp, Mapping.APITags.UserAPITag, Mapping.APIActions.deleteUser);
     }
@@ -120,7 +120,7 @@ public class UserController  extends AbstractController{
         byte[] binaryContent = DBUtils.ConvertInputStream(request.getInputStream());
         if (binaryContent.length > 0) sqlParams.put(UserTable.Columns.BinaryContent.getName(), binaryContent);
 
-        IResponse<Integer> resp = () -> userControllerService.insertUser(sqlParams);
+        IResponse<Integer> resp = () -> userControllerService.insert(sqlParams);
         Log.i("inserting User");
         return generateBodyResponse(resp, Mapping.APITags.UserAPITag, Mapping.APIActions.insertUser);
     }
@@ -130,7 +130,7 @@ public class UserController  extends AbstractController{
     @ResponseBody
     public WebModel<Integer>
     downloadUserImageById (@PathVariable (value="id") Integer User_id, HttpServletResponse response) throws IOException {
-        User user = userControllerService.getUser(User_id);
+        User user = userControllerService.get(User_id);
         int imgLength = user.getBinaryContent().length;
         long timeNow = Date.from(new Date().toInstant()).getTime();
         response.addHeader("Content-Disposition", "attachment; filename=" + timeNow + "_" + user.getFileName());
@@ -151,7 +151,7 @@ public class UserController  extends AbstractController{
     @ResponseStatus(HttpStatus.OK)
     public WebModel<Integer>
     showUserImageById (@PathVariable (value="id") Integer user_id, HttpServletResponse response) throws IOException {
-        User user = userControllerService.getUser(user_id);
+        User user = userControllerService.get(user_id);
         int imgLength = user.getBinaryContent().length;
         response.setContentType(MediaType.IMAGE_JPEG_VALUE);
         response.setContentLength(imgLength);

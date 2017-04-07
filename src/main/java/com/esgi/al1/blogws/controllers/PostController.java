@@ -39,7 +39,7 @@ public class PostController extends AbstractController {
         @ResponseStatus(value = HttpStatus.OK)
         WebModel<List<Post>>
         getAllPosts (@PathVariable Integer start, @PathVariable Integer end){
-                IResponse<List<Post>> resp = () -> postControllerService.getAllPosts(start, end);
+                IResponse<List<Post>> resp = () -> postControllerService.getAllLimit(start, end);
                 Log.i("getting limited posts");
                 return generateBodyResponse(resp, APITags.PostAPITag, APIActions.getPosts);
         }
@@ -49,7 +49,7 @@ public class PostController extends AbstractController {
         @ResponseStatus(value = HttpStatus.OK)
         WebModel<Post>
         getPostById (@PathVariable Integer id) {
-                IResponse<Post> resp = () -> postControllerService.getPost(id);
+                IResponse<Post> resp = () -> postControllerService.get(id);
                 return generateBodyResponse(resp,APITags.PostAPITag, APIActions.getPosts);
         }
 
@@ -58,7 +58,7 @@ public class PostController extends AbstractController {
         @ResponseStatus(value = HttpStatus.OK)
         WebModel<List<Post>>
         getAllPosts () {
-                IResponse<List<Post>> resp = postControllerService::getAllPosts;
+                IResponse<List<Post>> resp = postControllerService::getAll;
                 Log.i("getting all posts");
                 return generateBodyResponse(resp, APITags.PostAPITag, APIActions.getPosts);
         }
@@ -88,7 +88,7 @@ public class PostController extends AbstractController {
                 byte[] binaryContent = DBUtils.ConvertInputStream(request.getInputStream());
                 if (binaryContent.length > 0) sqlParams.put(PostTable.Columns.BinaryContent.getName(), binaryContent);
 
-                IResponse<Integer> resp = () -> postControllerService.updatePost(sqlParams, id);
+                IResponse<Integer> resp = () -> postControllerService.update(sqlParams, id);
                 Log.i("updating post");
                 return generateBodyResponse(resp, APITags.PostAPITag, APIActions.updatePost);
         }
@@ -98,7 +98,7 @@ public class PostController extends AbstractController {
         @ResponseStatus(HttpStatus.OK)
         WebModel<Integer>
         deletePost (@PathVariable Integer id) {
-                IResponse<Integer> resp = () -> postControllerService.deletePost(id);
+                IResponse<Integer> resp = () -> postControllerService.delete(id);
                 Log.i("deleting post");
                 return generateBodyResponse(resp,APITags.PostAPITag, APIActions.deletePost);
         }
@@ -127,7 +127,7 @@ public class PostController extends AbstractController {
                 byte[] binaryContent = DBUtils.ConvertInputStream(request.getInputStream());
                 if (binaryContent.length > 0) sqlParams.put(PostTable.Columns.BinaryContent.getName(), binaryContent);
 
-                IResponse<Integer> resp = () -> postControllerService.insertPost(sqlParams);
+                IResponse<Integer> resp = () -> postControllerService.insert(sqlParams);
                 Log.i("inserting post");
                 return generateBodyResponse(resp,APITags.PostAPITag, APIActions.insertPost);
         }
@@ -137,7 +137,7 @@ public class PostController extends AbstractController {
         @ResponseStatus(HttpStatus.OK)
         public WebModel<Integer>
         downloadPostImageById (@PathVariable (value="id") Integer post_id, HttpServletResponse response) throws IOException {
-                Post post = postControllerService.getPost(post_id);
+                Post post = postControllerService.get(post_id);
                 int imgLength = post.getBinaryContent().length;
                 long timeNow = Date.from(new Date().toInstant()).getTime();
                 response.setContentLength(imgLength);
@@ -158,7 +158,7 @@ public class PostController extends AbstractController {
         @ResponseStatus(HttpStatus.OK)
         public WebModel<Integer>
         showPostImageById (@PathVariable (value="id") Integer post_id, HttpServletResponse response) throws IOException {
-                Post post = postControllerService.getPost(post_id);
+                Post post = postControllerService.get(post_id);
                 int imgLength = post.getBinaryContent().length;
                 response.setContentType(MediaType.IMAGE_JPEG_VALUE);
                 response.setContentLength(imgLength);

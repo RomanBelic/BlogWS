@@ -5,19 +5,31 @@ package com.esgi.al1.blogws.utils;
  */
 public class GeneratedQuery {
 
-    private final Object[] paramArr;
-    private final String paramStr;
+    private Object[] paramArr;
+    private String fullQuery;
 
-    public GeneratedQuery(String paramStr, Object[] paramArr) {
+    public void setParamArr(Object[] paramArr) {
         this.paramArr = paramArr;
-        this.paramStr = paramStr;
     }
 
+    public void setFullQuery(String fullQuery) {
+        this.fullQuery = fullQuery;
+    }
+
+    public GeneratedQuery() {
+
+    }
+
+    public GeneratedQuery(String fullQuery, Object[] paramArr) {
+        this.fullQuery = fullQuery;
+        this.paramArr = paramArr;
+    }
     public Object[] getParamArr() {
         return paramArr;
     }
 
-    public String getParamStr() {
-        return paramStr;
+    public String getFullQuery() {
+        return fullQuery;
     }
+
 }

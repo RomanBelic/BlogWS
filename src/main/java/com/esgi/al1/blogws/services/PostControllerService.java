@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Romaaan on 26/03/2017.
@@ -16,36 +16,91 @@ import java.util.List;
 @Service
 public class PostControllerService extends AbstractControllerService<Post>  {
 
+
+    private GeneratedQuery generateSelect (Object...args){
+        return new GeneratedQuery(this.queries.GetAllPosts, args);
+    }
+
+    private GeneratedQuery generateLimitedSelect (Object...args){
+        return new GeneratedQuery(this.queries.GetAllPostsLimit, args);
+    }
+
+    private GeneratedQuery generatedDelete (Object...args){
+        return new GeneratedQuery(this.queries.DeletePost, args);
+    }
+
+    private GeneratedQuery generateGetPost (Object...args){
+        return new GeneratedQuery(this.queries.GetPost, args);
+    }
+
+    private GeneratedQuery generateUpdatePost (HashMap<String,Object> sqlParams, Object...args){
+        GeneratedQuery generatedQuery = new GeneratedQuery();
+        Object[] paramArr = new Object[sqlParams.size() + args.length];
+        String updStr = "";
+        String fullQuery = "";
+        if (sqlParams.size() > 0) {
+            int index = 0;
+            for (Map.Entry<String, Object> e : sqlParams.entrySet()) {
+                updStr += "," + e.getKey() + "=?";
+                paramArr[index] = e.getValue();
+                index++;
+            }
+            for (Object arg : args){
+                paramArr[index] = arg;
+                index++;
+            }
+
+            index = updStr.indexOf(',');
+            updStr = (index != -1 && updStr.length() > 0) ? updStr.substring(index + 1, updStr.length()) : updStr;
+            fullQuery = String.format(this.queries.UpdatePost + "%s %s", updStr, queries.WherePostId);
+        }
+        generatedQuery.setFullQuery(fullQuery);
+        generatedQuery.setParamArr(paramArr);
+        return generatedQuery;
+    }
+
+    private GeneratedQuery generateInsertPost (HashMap<String,Object> sqlParams, Object...args){
+        GeneratedQuery generatedQuery = new GeneratedQuery();
+        Object[] paramArr = new Object[sqlParams.size() + args.length];
+        String fullquery = "";
+        String insCols = "";
+        String insVals = "";
+        if (sqlParams.size() > 0) {
+            int index = 0;
+            for (Map.Entry<String, Object> e : sqlParams.entrySet()) {
+                insCols += "," + e.getKey();
+                insVals += ",?";
+                paramArr[index] = e.getValue();
+                index++;
+            }
+            for (Object arg : args){
+                paramArr[index] = arg;
+                index++;
+            }
+
+            index = insCols.indexOf(',');
+            insCols = (index != -1 && insCols.length() > 0) ? insCols.substring(index + 1, insCols.length()) : insCols;
+            insCols = " (".concat(insCols).concat(")");
+
+            index = insVals.indexOf(',');
+            insVals = (index != -1 && insVals.length() > 0) ? insVals.substring(index + 1, insVals.length()) : insVals;
+            insVals = " VALUES (".concat(insVals).concat(")");
+
+            fullquery = String.format(this.queries.InsertPost + "%s %s", insCols, insVals);
+        }
+        generatedQuery.setFullQuery(fullquery);
+        generatedQuery.setParamArr(paramArr);
+        return generatedQuery;
+    }
+
     @Autowired
     public PostControllerService(PostRepository postRepository, Queries queries) {
         super(postRepository, queries);
-    }
-
-    public List<Post> getAllPosts() {
-        return repository.getAll(queries.GetAllPosts);
-    }
-
-    public Post getPost(int id) {
-        return repository.get(queries.GetPost, id);
-    }
-
-    public List<Post> getAllPosts(int start, int end) {
-        return repository.getAll(queries.GetAllPostsLimit, start,end);
-    }
-
-    public int updatePost(HashMap<String, Object> sqlParams, int id) {
-        GeneratedQuery gq = updateGenerator.generate(sqlParams);
-        String query = String.format(queries.UpdatePost + "%s %s", gq.getParamStr(), queries.WherePostId);
-        return repository.updateOrDelete(query, gq.getParamArr(), id);
-    }
-
-    public int deletePost(int id) {
-        return repository.updateOrDelete(queries.DeletePost, id);
-    }
-
-    public int insertPost(HashMap<String, Object> sqlParams) {
-        GeneratedQuery gq = insertGenerator.generate(sqlParams);
-        String query = String.format(queries.InsertPost + "%s", gq.getParamStr());
-        return repository.insert(query, gq.getParamArr());
+        selectAllQueryGenerator = this::generateSelect;
+        selectLimitedQueryGenerator = this::generateLimitedSelect;
+        deleteQueryGenerator = this::generatedDelete;
+        selectSingleQueryGenerator = this::generateGetPost;
+        updateQueryGenerator = this::generateUpdatePost;
+        insertQueryGenerator = this::generateInsertPost;
     }
 }

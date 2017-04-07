@@ -104,4 +104,5 @@ public class Post implements Serializable {
     public boolean equals(Object obj) {
         return (obj instanceof Post && ((Post)obj).id == this.id);
     }
+
 }

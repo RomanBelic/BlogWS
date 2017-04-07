@@ -55,7 +55,7 @@ public class PostControllerService extends AbstractControllerService<Post>  {
             fullQuery = String.format(this.queries.UpdatePost + "%s %s", updStr, queries.WherePostId);
         }
         generatedQuery.setFullQuery(fullQuery);
-        generatedQuery.setParamArr(paramArr);
+        generatedQuery.setSqlValuesArray(paramArr);
         return generatedQuery;
     }
 
@@ -89,7 +89,7 @@ public class PostControllerService extends AbstractControllerService<Post>  {
             fullquery = String.format(this.queries.InsertPost + "%s %s", insCols, insVals);
         }
         generatedQuery.setFullQuery(fullquery);
-        generatedQuery.setParamArr(paramArr);
+        generatedQuery.setSqlValuesArray(paramArr);
         return generatedQuery;
     }
 

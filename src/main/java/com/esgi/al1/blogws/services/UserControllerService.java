@@ -54,7 +54,7 @@ public class UserControllerService extends AbstractControllerService<User>{
             fullQuery = String.format(this.queries.UpdateUser + "%s %s", updStr, queries.WhereUserId);
         }
         generatedQuery.setFullQuery(fullQuery);
-        generatedQuery.setParamArr(paramArr);
+        generatedQuery.setSqlValuesArray(paramArr);
         return generatedQuery;
     }
 
@@ -88,7 +88,7 @@ public class UserControllerService extends AbstractControllerService<User>{
             fullquery = String.format(this.queries.InsertUser + "%s %s", insCols, insVals);
         }
         generatedQuery.setFullQuery(fullquery);
-        generatedQuery.setParamArr(paramArr);
+        generatedQuery.setSqlValuesArray(paramArr);
         return generatedQuery;
     }
 

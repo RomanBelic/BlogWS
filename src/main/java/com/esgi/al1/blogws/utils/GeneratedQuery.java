@@ -5,11 +5,11 @@ package com.esgi.al1.blogws.utils;
  */
 public class GeneratedQuery {
 
-    private Object[] paramArr;
+    private Object[] sqlValuesArray;
     private String fullQuery;
 
-    public void setParamArr(Object[] paramArr) {
-        this.paramArr = paramArr;
+    public void setSqlValuesArray(Object[] sqlValuesArray) {
+        this.sqlValuesArray = sqlValuesArray;
     }
 
     public void setFullQuery(String fullQuery) {
@@ -20,12 +20,12 @@ public class GeneratedQuery {
 
     }
 
-    public GeneratedQuery(String fullQuery, Object[] paramArr) {
+    public GeneratedQuery(String fullQuery, Object[] sqlValuesArray) {
         this.fullQuery = fullQuery;
-        this.paramArr = paramArr;
+        this.sqlValuesArray = sqlValuesArray;
     }
-    public Object[] getParamArr() {
-        return paramArr;
+    public Object[] getSqlValuesArray() {
+        return sqlValuesArray;
     }
 
     public String getFullQuery() {

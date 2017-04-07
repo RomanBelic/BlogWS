@@ -70,7 +70,7 @@ public abstract class AbstractControllerService<T> {
         T result = null;
         try {
             GeneratedQuery genQuery = selectSingleQueryGenerator.generate(id);
-            result = repository.get(genQuery.getFullQuery(), genQuery.getParamArr());
+            result = repository.get(genQuery.getFullQuery(), genQuery.getSqlValuesArray());
         }catch (NotYetImplementedException e){
             Log.err(e.getMessage());
         }
@@ -81,7 +81,7 @@ public abstract class AbstractControllerService<T> {
         List<T> result = null;
         try {
             GeneratedQuery genQuery = selectLimitedQueryGenerator.generate(start, end);
-            result = repository.getAll(genQuery.getFullQuery(), genQuery.getParamArr());
+            result = repository.getAll(genQuery.getFullQuery(), genQuery.getSqlValuesArray());
         }catch (NotYetImplementedException e){
             Log.err(e.getMessage());
         }
@@ -91,7 +91,7 @@ public abstract class AbstractControllerService<T> {
     public int update(HashMap<String, Object> sqlParams, int id) {
         try {
             GeneratedQuery genQuery = updateQueryGenerator.generate(sqlParams, id);
-            return repository.updateOrDelete(genQuery.getFullQuery(), genQuery.getParamArr());
+            return repository.updateOrDelete(genQuery.getFullQuery(), genQuery.getSqlValuesArray());
         }catch (NotYetImplementedException e){
             return -1;
         }
@@ -100,7 +100,7 @@ public abstract class AbstractControllerService<T> {
     public int delete(int id) {
         try {
             GeneratedQuery genQuery = deleteQueryGenerator.generate(id);
-            return repository.updateOrDelete(genQuery.getFullQuery(), genQuery.getParamArr());
+            return repository.updateOrDelete(genQuery.getFullQuery(), genQuery.getSqlValuesArray());
         }catch (NotYetImplementedException e){
             return -1;
         }
@@ -109,7 +109,7 @@ public abstract class AbstractControllerService<T> {
     public int insert(HashMap<String, Object> sqlParams) {
         try {
             GeneratedQuery genQuery = insertQueryGenerator.generate(sqlParams);
-            return repository.insert(genQuery.getFullQuery(), genQuery.getParamArr());
+            return repository.insert(genQuery.getFullQuery(), genQuery.getSqlValuesArray());
         }catch (NotYetImplementedException e){
            return -1;
         }

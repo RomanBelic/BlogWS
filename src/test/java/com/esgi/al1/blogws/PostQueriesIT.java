@@ -5,8 +5,10 @@ import com.esgi.al1.blogws.utils.Queries;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -16,7 +18,9 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@DataJpaTest
 @ActiveProfiles("Test")
+@TestExecutionListeners({})
 public class PostQueriesIT {
 
     DataBase dataBase;
@@ -25,7 +29,6 @@ public class PostQueriesIT {
     @Before
     public void init(){
         dataBase = new DataBase("blogws_test");
-
         dataBase.getPostTable();
         queries = new Queries(dataBase);
     }

@@ -58,7 +58,7 @@ public class MySqlConnectorIT {
         try{
             Class.forName("com.mysql.jdbc.Driver");
         }catch (ClassNotFoundException e){
-            System.out.println("JDBC driver not found");
+            Log.err("JDBC driver not found");
         }
 
         Connection connection = null;

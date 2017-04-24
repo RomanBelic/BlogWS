@@ -3,6 +3,7 @@ package com.esgi.al1.blogws.dbconnector;
 import com.esgi.al1.blogws.utils.SqlConfig;
 import com.esgi.al1.blogws.utils.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
@@ -22,6 +23,7 @@ public class MySqlConnector {
 
     private final SqlConfig sqlCfg;
 
+    @Bean
     public Connection getNewConnection () throws SQLException{
 
         Connection cn;

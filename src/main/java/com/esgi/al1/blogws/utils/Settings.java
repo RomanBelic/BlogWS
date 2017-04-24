@@ -14,6 +14,7 @@ import java.util.Calendar;
 @Configuration
 @EnableCaching
 @PropertySource("application.properties")
+@ComponentScan(basePackages = {"com.esgi.al1.blogws"})
 public class Settings {
 
     public static final String ProductionProfile = "Production";

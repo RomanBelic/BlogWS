@@ -4,6 +4,7 @@ import com.esgi.al1.blogws.dbconnector.MySqlConnector;
 import com.esgi.al1.blogws.interfaces.IResultReader;
 import com.esgi.al1.blogws.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Repository;
 
 import javax.validation.constraints.NotNull;

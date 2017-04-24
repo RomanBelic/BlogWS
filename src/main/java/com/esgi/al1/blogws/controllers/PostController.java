@@ -89,7 +89,7 @@ public class PostController extends AbstractController {
                 if (binaryContent.length > 0) sqlParams.put(PostTable.Columns.BinaryContent.getName(), binaryContent);
 
                 IResponse<Integer> resp = () -> postControllerService.update(sqlParams, id);
-                Log.i("updating post");
+                Log.i("updating post"); 
                 return generateBodyResponse(resp, APITags.PostAPITag, APIActions.updatePost);
         }
 

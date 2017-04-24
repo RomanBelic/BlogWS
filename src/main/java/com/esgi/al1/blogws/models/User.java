@@ -1,13 +1,10 @@
 package com.esgi.al1.blogws.models;
 
-import lombok.AllArgsConstructor;
-
 import java.util.Date;
 
 /**
  * Created by Romaaan on 25/03/2017.
  */
-@AllArgsConstructor
 public class User {
 
     private int id;

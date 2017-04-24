@@ -33,10 +33,9 @@ public class SystemInfoController extends AbstractController{
     public @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
     WebModel<SystemInfo>
-    getSystemInfo (HttpServletRequest request){
+    getSystemInfo (){
         IResponse<SystemInfo> resp = systemInfoControllerService::getSystemInfo;
         Log.i("getting system info");
-        Log.i(request.getRemoteAddr());
         return generateBodyResponse(resp, Mapping.APITags.SysAPITag, Mapping.APIActions.getSystemInfo);
     }
 

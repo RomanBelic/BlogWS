@@ -18,19 +18,19 @@ import java.util.HashMap;
 @Service
 public class SystemInfoControllerService  {
 
-    private UserControllerService userControllerService;
+    private final UserControllerService userControllerService;
+    private final IAuthorization authorizationService;
     private final SystemRepository repository;
 
     @Autowired
     public SystemInfoControllerService(UserControllerService userControllerService, SystemRepository repository) {
         this.userControllerService = userControllerService;
         this.repository = repository;
+        this.authorizationService = (int userId, UserType type) -> {
+            User u = userControllerService.get(userId);
+            return u != null && u.getType() == type;
+        };
     }
-
-    private final IAuthorization authorizationService = (int userId, UserType type) -> {
-        User u = userControllerService.get(userId);
-        return u != null && u.getType() == type;
-    };
 
     public int setSystemProperties(HashMap<String,String> params, int userId){
         if (authorizationService.isUserOfType(userId, UserType.Admin)){

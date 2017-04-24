@@ -4,7 +4,6 @@ import com.esgi.al1.blogws.dbconnector.MySqlConnector;
 import com.esgi.al1.blogws.utils.Log;
 import com.esgi.al1.blogws.utils.SqlConfig;
 import com.esgi.al1.blogws.utils.SqlConfigBuilder;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.validation.constraints.AssertTrue;
 import java.sql.SQLException;
 import java.sql.Connection;
 

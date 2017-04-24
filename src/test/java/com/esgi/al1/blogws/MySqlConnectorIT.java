@@ -13,8 +13,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.validation.constraints.AssertTrue;
 import java.sql.SQLException;
 import java.sql.Connection;
+
+import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -25,19 +28,19 @@ import java.sql.Connection;
 @DataJpaTest
 @ActiveProfiles("Test")
 public class MySqlConnectorIT {
+
     SqlConfig sqlConfig;
     private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    private static final String DB_URL = "jdbc:mysql//localhost:3306/blogws?user=root&password=mysqlroot";
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/blogws_test";
     private static final String LOGIN = "root";
     private static final String PASS = "mysqlroot";
     private static final String HOST = "localhost";
     private static final String PORT = "3306";
 
-
     @Before
     public void init(){
         SqlConfigBuilder sqlConfigBuilder = new SqlConfigBuilder();
-        sqlConfigBuilder.buildConnectionParams("convertToNull&autoReconnect=true&characterEncoding=UTF-8&characterSetResults=UTF-8&allowMultiQueries=true&useSSL=false");
+        sqlConfigBuilder.buildConnectionParams(DB_URL);
         sqlConfigBuilder.buildLogin(LOGIN);
         sqlConfigBuilder.buildPass(PASS);
         sqlConfigBuilder.buildDriver(JDBC_DRIVER);
@@ -49,12 +52,19 @@ public class MySqlConnectorIT {
     }
 
     @Test
-    public void should_not_throws_SQLException(){
+    public void should_not_throws_ClassNotFoundException_or_SQLException(){
         MySqlConnector mySqlConnector = new MySqlConnector(sqlConfig);
+
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+        }catch (ClassNotFoundException e){
+            Log.err("JDBC driver not found");
+        }
+
         Connection connection = null;
         try{
             connection = mySqlConnector.getNewConnection();
-            Assert.fail("JDBC Connection not thrown");
+            assertTrue(connection != null);
         }catch (SQLException ex){
             Log.err("Error JDBC Connection : " + ex.getMessage());
         }

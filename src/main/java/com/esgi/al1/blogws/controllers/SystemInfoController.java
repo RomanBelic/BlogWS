@@ -33,9 +33,10 @@ public class SystemInfoController extends AbstractController{
     public @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
     WebModel<SystemInfo>
-    getSystemInfo (){
+    getSystemInfo (HttpServletRequest request){
         IResponse<SystemInfo> resp = systemInfoControllerService::getSystemInfo;
         Log.i("getting system info");
+        saveRequestToLog(request);
         return generateBodyResponse(resp, Mapping.APITags.SysAPITag, Mapping.APIActions.getSystemInfo);
     }
 
@@ -43,13 +44,15 @@ public class SystemInfoController extends AbstractController{
     public @ResponseBody
     @ResponseStatus(value = HttpStatus.OK)
     WebModel<ServerInfo>
-    getServerInfo (){
+    getServerInfo (HttpServletRequest request){
         IResponse<ServerInfo> resp = systemInfoControllerService::getServerInfo;
         Log.i("getting server info");
+        saveRequestToLog(request);
         return generateBodyResponse(resp, Mapping.APITags.SysAPITag, Mapping.APIActions.getServInfo);
     }
 
-    @RequestMapping (value = Mapping.SetProperties, method = RequestMethod.POST)
+
+    @RequestMapping (value = Mapping.SetProperties, method = RequestMethod.PUT)
     public @ResponseBody
     WebModel<Integer>
     setSystemProperties (@PathVariable Integer userId,
@@ -62,11 +65,29 @@ public class SystemInfoController extends AbstractController{
             paramMap.put(paramKey, paramVal);
         }
         Log.i("setting system params");
+        saveRequestToLog(request);
         int status = systemInfoControllerService.setSystemProperties(paramMap, userId);
         response.setStatus(status);
         return generateBodyResponse(()-> status, Mapping.APITags.SysAPITag, Mapping.APIActions.setSysProps);
     }
 
-
+    @RequestMapping (value = Mapping.SetServerProperties, method = RequestMethod.PUT)
+    public @ResponseBody
+    WebModel<Integer>
+    setServerProperties (@PathVariable Integer userId,
+                         HttpServletRequest request, HttpServletResponse response){
+        HashMap<String,String> paramMap = new HashMap<>(8);
+        Enumeration<String> enumStr = request.getParameterNames();
+        while (enumStr.hasMoreElements()){
+            String paramKey = enumStr.nextElement();
+            String paramVal = request.getParameter(paramKey);
+            paramMap.put(paramKey, paramVal);
+        }
+        Log.i("setting server params");
+        saveRequestToLog(request);
+        int status = systemInfoControllerService.setServerProperties(paramMap, userId);
+        response.setStatus(status);
+        return generateBodyResponse(()-> status, Mapping.APITags.SysAPITag, Mapping.APIActions.setServProps);
+    }
 
 }

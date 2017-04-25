@@ -47,6 +47,11 @@ public class SystemInfoControllerService  {
         return repository.getServerInfo();
     }
 
-
+    public int setServerProperties(HashMap<String,String> params, int userId){
+        if (authorizationService.isUserOfType(userId, UserType.Admin)){
+            return repository.setServerProperties(params);
+        }
+        return HttpStatus.UNAUTHORIZED.value();
+    }
 
 }

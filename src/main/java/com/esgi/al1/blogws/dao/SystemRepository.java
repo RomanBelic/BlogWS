@@ -7,7 +7,7 @@ import com.esgi.al1.blogws.utils.Log;
 import com.esgi.al1.blogws.utils.Settings;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
-import javax.servlet.http.HttpServletResponse;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Calendar;
@@ -17,6 +17,11 @@ import java.util.Map;
 
 /**
  * Created by Romaaan on 30/03/2017.
+ */
+/*
+    Class bordelique, systeminfo, serverinfo sont mélangées dans même répo
+    du code répété, etc
+
  */
 @Repository
 public class SystemRepository {
@@ -51,13 +56,12 @@ public class SystemRepository {
         return info;
     };
 
-
     public int setSystemProperties(HashMap<String,String> properties){
         try {
             for (Map.Entry<String, String> prop : properties.entrySet()) {
                 System.setProperty(prop.getKey(), prop.getValue());
             }
-            return HttpServletResponse.SC_OK;
+            return HttpStatus.OK.value();
         }catch(Exception e){
             Log.err("System Repository : " + e.getMessage());
             return HttpStatus.INTERNAL_SERVER_ERROR.value();
@@ -72,4 +76,13 @@ public class SystemRepository {
         return sysInfReader.getInfo();
     }
 
+    public int setServerProperties(HashMap<String,String> properties){
+        HashMap<String,String> srvProperties = Settings.getServerProperties();
+        for (Map.Entry<String,String> entry : properties.entrySet() ){
+            if (srvProperties.containsKey(entry.getKey())){
+                srvProperties.put(entry.getKey(), entry.getValue());
+            }
+        }
+        return HttpStatus.OK.value();
+    }
 }

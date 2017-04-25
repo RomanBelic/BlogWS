@@ -7,6 +7,7 @@ import org.springframework.core.env.Environment;
 
 import javax.annotation.PostConstruct;
 import java.util.Calendar;
+import java.util.HashMap;
 
 /**
  * Created by Romaaan on 18/03/2017.
@@ -28,6 +29,8 @@ public class Settings {
     private DataBase dataBase;
     private DataBase dataBaseTest;
 
+    private static final HashMap<String,String> srvProperties = new HashMap<>(16);
+
     @Autowired
     public Settings(Environment env) {
         this.env = env;
@@ -42,6 +45,11 @@ public class Settings {
                 buildLogin(env.getProperty("connectionstring.login","root")).
                 buildPass(env.getProperty("connectionstring.pass","")).
                 buildConnectionParams(env.getProperty("connectionstring.dbparams")).build();
+    }
+
+    @PostConstruct
+    private void initServerSettings(){
+        srvProperties.put("LogEnabled","1");
     }
 
     @PostConstruct
@@ -71,5 +79,9 @@ public class Settings {
     @Profile(TestProfile)
     public DataBase getDataBaseTest(){
         return dataBaseTest;
+    }
+
+    public static HashMap<String,String> getServerProperties(){
+        return srvProperties;
     }
 }

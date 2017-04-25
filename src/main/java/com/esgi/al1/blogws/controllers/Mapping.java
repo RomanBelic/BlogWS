@@ -19,6 +19,7 @@ class Mapping {
     public static final String SystemInfo ="/SystemInfo";
     public static final String ServerInfo ="/ServerInfo";
     public static final String SetProperties ="/SetProperties/{userId}";
+    public static final String SetServerProperties ="/SetServProperties/{userId}";
 
     public static class APITags {
         public static final String PostAPITag = "PostAPI";
@@ -42,5 +43,6 @@ class Mapping {
         public static final String getSystemInfo = "SysInfo";
         public static final String getServInfo = "ServInfo";
         public static final String setSysProps = "SetSysProps";
+        public static final String setServProps = "SetServProps";
     }
 }

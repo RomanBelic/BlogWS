@@ -141,7 +141,6 @@ public class UserController  extends AbstractController{
         response.setContentType("image/jpeg");
         try (OutputStream os = response.getOutputStream()) {
             os.write(user.getBinaryContent());
-            os.flush();
         }
         return generateBodyResponse(() -> imgLength, Mapping.APITags.UserAPITag, Mapping.APIActions.downloadImage);
     }
@@ -161,7 +160,6 @@ public class UserController  extends AbstractController{
         response.addHeader("Date", new Date().toString());
         try (OutputStream os = response.getOutputStream()) {
             os.write(user.getBinaryContent());
-            os.flush();
         }
         return generateBodyResponse(() -> imgLength, Mapping.APITags.UserAPITag, Mapping.APIActions.downloadImage);
     }

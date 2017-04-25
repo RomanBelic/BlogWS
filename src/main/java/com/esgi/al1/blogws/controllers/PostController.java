@@ -148,7 +148,6 @@ public class PostController extends AbstractController {
                 response.addHeader("Content-Disposition", "attachment; filename=" + timeNow + "_" + post.getFileName());
                 try (OutputStream os = response.getOutputStream()) {
                         os.write(post.getBinaryContent());
-                        os.flush();
                 }
                 return generateBodyResponse(() -> imgLength, APITags.PostAPITag, APIActions.downloadImage);
         }
@@ -168,7 +167,6 @@ public class PostController extends AbstractController {
                 response.addHeader("Date", new Date().toString());
                 try (OutputStream os = response.getOutputStream()) {
                         os.write(post.getBinaryContent());
-                        os.flush();
                 }
                 return generateBodyResponse(() -> imgLength, APITags.PostAPITag, APIActions.downloadImage);
         }

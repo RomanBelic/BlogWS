@@ -15,11 +15,10 @@ public class User {
     private byte[] binaryContent;
     private String fileName;
     private UserType type;
+    private String login;
+    private String password;
 
     public User (){}
-
-    public User(int id, int idType, Date dateCreated, String name, String lastName, byte[] arr, String filrName, UserType userType) {
-    }
 
     public int getId() {
         return id;

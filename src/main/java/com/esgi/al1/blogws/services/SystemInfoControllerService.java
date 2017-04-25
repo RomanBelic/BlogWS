@@ -22,14 +22,16 @@ public class SystemInfoControllerService  {
     private final IAuthorization authorizationService;
     private final SystemRepository repository;
 
+    private boolean isAuthorized(int userId, UserType type){
+        User u = userControllerService.get(userId);
+        return u != null && u.getType() == type;
+    }
+
     @Autowired
     public SystemInfoControllerService(UserControllerService userControllerService, SystemRepository repository) {
         this.userControllerService = userControllerService;
         this.repository = repository;
-        this.authorizationService = (int userId, UserType type) -> {
-            User u = userControllerService.get(userId);
-            return u != null && u.getType() == type;
-        };
+        this.authorizationService = this::isAuthorized;
     }
 
     public int setSystemProperties(HashMap<String,String> params, int userId){

@@ -78,8 +78,15 @@ public class PostControllerIT {
         String text = "My first text post";
         String fileName = "file.txt";
 
-        Post post = new Post(todayDate, authorId, id, description, tags, arr, text, fileName);
-
+        Post post = new Post();
+        post.setId(id);
+        post.setDate(todayDate);
+        post.setAuthorId(authorId);
+        post.setDescription(description);
+        post.setTags(tags);
+        post.setBinaryContent(arr);
+        post.setText(text);
+        post.setFileName(fileName);
         given()
                 .log().all()
                 .body(post)

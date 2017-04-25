@@ -29,14 +29,12 @@ public abstract class AbstractController {
     protected int saveRequestToLog(HttpServletRequest request){
         String isLogEnabled;
         if ((isLogEnabled = Settings.getServerProperties().get("LogEnabled")) != null && isLogEnabled.equals("1")) {
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(new Date());
             String msg = String.format("Connection from %s:%d to %s:%d at %s\r\n",
                     request.getRemoteAddr(),
                     request.getRemotePort(),
                     request.getLocalAddr(),
                     request.getLocalPort(),
-                    cal.getTime().toString());
+                    new Date().toString());
             return Log.writeToFile("Log.txt", msg);
         }
         return 0;

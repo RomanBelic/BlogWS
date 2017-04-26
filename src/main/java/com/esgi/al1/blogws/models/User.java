@@ -16,9 +16,6 @@ public class User {
     private String fileName;
     private UserType type;
     private String login;
-
-
-
     private String password;
 
     public User (){}
@@ -103,6 +100,10 @@ public class User {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getLogin() {
+        return login;
     }
 
     public void setPassword(String password) {

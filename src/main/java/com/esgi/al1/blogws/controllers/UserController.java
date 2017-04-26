@@ -83,6 +83,8 @@ public class UserController  extends AbstractController{
     WebModel<Integer>
     updateUser (@PathVariable Integer id,
                 @RequestParam(value = "Name", required = false) String name,
+                @RequestParam(value = "Password", required = false) String password,
+                @RequestParam(value = "Login", required = false) String login,
                 @RequestParam(value = "LastName", required = false) String lastname,
                 @RequestParam(value = "IdType", required = false) Integer idType,
                 @RequestParam(value = "Date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date dateCreated,
@@ -97,6 +99,8 @@ public class UserController  extends AbstractController{
         if (fileName != null) sqlParams.put(UserTable.Columns.FileName.getName(), fileName);
         byte[] binaryContent = DBUtils.ConvertInputStream(request.getInputStream());
         if (binaryContent.length > 0) sqlParams.put(UserTable.Columns.BinaryContent.getName(), binaryContent);
+        if (login != null) sqlParams.put(UserTable.Columns.Login.getName(), login);
+        if (password != null) sqlParams.put(UserTable.Columns.Password.getName(), password);
 
         IResponse<Integer> resp = () -> userControllerService.update(sqlParams, id);
         Log.i("updating User");

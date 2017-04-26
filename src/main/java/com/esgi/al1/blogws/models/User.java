@@ -16,24 +16,15 @@ public class User {
     private String fileName;
     private UserType type;
     private String login;
+
+
+
     private String password;
 
     public User (){}
 
-    public String getLogin() {
-        return login;
-    }
+    public User(int id, int idType, Date dateCreated, String name, String lastName, byte[] arr, String filrName, UserType userType) {
 
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public int getId() {
@@ -110,4 +101,15 @@ public class User {
         return (obj instanceof User && ((User)obj).id == this.id);
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
 }

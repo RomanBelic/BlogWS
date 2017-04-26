@@ -2,11 +2,13 @@ package com.esgi.al1.blogws;
 
 import com.esgi.al1.blogws.dbconnector.MySqlConnector;
 import com.esgi.al1.blogws.utils.Log;
+import com.esgi.al1.blogws.utils.Settings;
 import com.esgi.al1.blogws.utils.SqlConfig;
 import com.esgi.al1.blogws.utils.SqlConfigBuilder;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -27,32 +29,30 @@ import static org.junit.Assert.assertTrue;
 @ActiveProfiles("Test")
 public class MySqlConnectorIT {
 
-    SqlConfig sqlConfig;
-    private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/blogws_test";
-    private static final String LOGIN = "root";
-    private static final String PASS = "mysqlroot";
-    private static final String HOST = "localhost";
-    private static final String PORT = "3306";
+    private MySqlConnector connector;
+    private SqlConfig sqlConfig;
+
+    public static final String JDBC_DRIVER = "jdbc:mysql";
+    public static final String LOGIN = "root";
+    public static final String PASS = "mysqlroot";
+    public static final String HOST = "localhost";
+    public static final String PORT = "3306";
+
 
     @Before
     public void init(){
-        SqlConfigBuilder sqlConfigBuilder = new SqlConfigBuilder();
-        sqlConfigBuilder.buildConnectionParams(DB_URL);
-        sqlConfigBuilder.buildLogin(LOGIN);
-        sqlConfigBuilder.buildPass(PASS);
-        sqlConfigBuilder.buildDriver(JDBC_DRIVER);
-        sqlConfigBuilder.buildHost(HOST);
-        sqlConfigBuilder.buildPort(PORT);
-        sqlConfigBuilder.build();
+        sqlConfig = new SqlConfigBuilder()
+        .buildLogin(LOGIN)
+        .buildPass(PASS)
+        .buildDriver(JDBC_DRIVER)
+        .buildHost(HOST)
+        .buildPort(PORT).build();
 
-        sqlConfig = new SqlConfig(sqlConfigBuilder);
+        connector = new MySqlConnector(sqlConfig);
     }
 
     @Test
     public void should_not_throws_ClassNotFoundException_or_SQLException(){
-        MySqlConnector mySqlConnector = new MySqlConnector(sqlConfig);
-
         try{
             Class.forName("com.mysql.jdbc.Driver");
         }catch (ClassNotFoundException e){
@@ -61,8 +61,9 @@ public class MySqlConnectorIT {
 
         Connection connection = null;
         try{
-            connection = mySqlConnector.getNewConnection();
+            connection = connector.getNewConnection();
             assertTrue(connection != null);
+            connection.close();
         }catch (SQLException ex){
             Log.err("Error JDBC Connection : " + ex.getMessage());
         }

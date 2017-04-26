@@ -16,7 +16,9 @@ public class UserTable extends DataTable{
         LastName("LastName",4),
         FileName("FileName",5),
         DateCreated("DateCreated",6),
-        BinaryContent("BinaryContent",7)
+        BinaryContent("BinaryContent",7),
+        Login("Login", 8),
+        Password("Password",9)
         ;
 
         private final String columnName;

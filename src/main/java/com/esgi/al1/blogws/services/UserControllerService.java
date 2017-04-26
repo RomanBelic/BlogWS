@@ -1,13 +1,19 @@
 package com.esgi.al1.blogws.services;
 
 import com.esgi.al1.blogws.dao.UserRepository;
+import com.esgi.al1.blogws.models.ServiceModel;
 import com.esgi.al1.blogws.models.User;
+import com.esgi.al1.blogws.models.WebModel;
 import com.esgi.al1.blogws.utils.GeneratedQuery;
 import com.esgi.al1.blogws.utils.Queries;
+import com.esgi.al1.blogws.utils.ServiceModelBuilder;
+import com.esgi.al1.blogws.utils.WebModelBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -92,6 +98,7 @@ public class UserControllerService extends AbstractControllerService<User>{
         return generatedQuery;
     }
 
+
     @Autowired
     public UserControllerService(UserRepository userRepository, Queries queries) {
         super(userRepository, queries);
@@ -103,5 +110,17 @@ public class UserControllerService extends AbstractControllerService<User>{
         insertQueryGenerator = this::generateInsertUser;
     }
 
-   
+    public ServiceModel<User> getUserByLoginPassword(String login, String password){
+        User content = repository.get(queries.GetUserByLoginPassword, login, password);
+        int httpStatus = (content != null) ? HttpStatus.OK.value() : HttpStatus.NOT_FOUND.value();
+        return generateServiceResponse(content, httpStatus);
+    }
+
+    public ServiceModel<Integer> insertUser(String login, String password, HashMap<String,Object> sqlParams){
+        User u = repository.get(queries.GetUserByLoginPassword, login, password);
+        int httpStatus = (u != null) ? HttpStatus.EXPECTATION_FAILED.value() : HttpStatus.CREATED.value();
+        int content = (u != null) ? -1 : this.insert(sqlParams);
+        return generateServiceResponse(content, httpStatus);
+    }
+
 }

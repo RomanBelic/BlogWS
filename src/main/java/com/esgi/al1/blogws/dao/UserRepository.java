@@ -25,7 +25,8 @@ public class UserRepository extends AbstractRepository<User>  {
         u.setBinaryContent(DBUtils.ConvertBlob(rs.getBlob(UserTable.Columns.BinaryContent.getOrdinal())));
         u.setFileName(rs.getString(UserTable.Columns.FileName.getOrdinal()));
         u.setType(UserType.getUserTypeById(u.getIdType()));
-
+        u.setLogin(rs.getString(UserTable.Columns.Login.getOrdinal()));
+        u.setPassword(rs.getString(UserTable.Columns.Password.getOrdinal()));
         return u;
     }
 

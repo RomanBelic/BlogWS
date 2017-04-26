@@ -41,7 +41,7 @@ public class PostController extends AbstractController {
         getAllPosts (@PathVariable Integer start, @PathVariable Integer end){
                 IResponse<List<Post>> resp = () -> postControllerService.getAllLimit(start, end);
                 Log.i("getting limited posts");
-                return generateBodyResponse(resp, APITags.PostAPITag, APIActions.getPosts);
+                return generateBodyResponse(resp, APITags.PostAPITag, APIActions.getPost);
         }
 
         @RequestMapping (value = Mapping.FindById, method = RequestMethod.GET)
@@ -50,7 +50,7 @@ public class PostController extends AbstractController {
         WebModel<Post>
         getPostById (@PathVariable Integer id) {
                 IResponse<Post> resp = () -> postControllerService.get(id);
-                return generateBodyResponse(resp,APITags.PostAPITag, APIActions.getPosts);
+                return generateBodyResponse(resp,APITags.PostAPITag, APIActions.getPost);
         }
 
         @RequestMapping (value =  Mapping.GetAll, method = RequestMethod.GET)
@@ -60,7 +60,7 @@ public class PostController extends AbstractController {
         getAllPosts () {
                 IResponse<List<Post>> resp = postControllerService::getAll;
                 Log.i("getting all posts");
-                return generateBodyResponse(resp, APITags.PostAPITag, APIActions.getPosts);
+                return generateBodyResponse(resp, APITags.PostAPITag, APIActions.getPost);
         }
 
         @RequestMapping (value =  Mapping.UpdateById , method = RequestMethod.PUT)

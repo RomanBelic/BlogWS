@@ -1,5 +1,6 @@
 package com.esgi.al1.blogws.interfaces;
 
+import com.esgi.al1.blogws.models.ServiceModel;
 import com.esgi.al1.blogws.models.WebModel;
 
 /**
@@ -9,7 +10,12 @@ public interface IResponse<T> {
 
     T getResponse();
 
-    interface IWebModelResponse <T>{
+    interface IWebResponse<T>{
         WebModel<T> convertResponse (IResponse<T> response);
+    }
+
+    //Generateur du webmodel à partir du model service
+    interface IWebModelGenerator<T>{
+        WebModel<T> convertResponse (IResponse<ServiceModel<T>> response);
     }
 }

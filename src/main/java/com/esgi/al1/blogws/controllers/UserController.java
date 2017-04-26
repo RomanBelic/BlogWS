@@ -1,6 +1,7 @@
 package com.esgi.al1.blogws.controllers;
 
 import com.esgi.al1.blogws.interfaces.IResponse;
+import com.esgi.al1.blogws.models.ServiceModel;
 import com.esgi.al1.blogws.models.User;
 import com.esgi.al1.blogws.models.WebModel;
 import com.esgi.al1.blogws.services.UserControllerService;
@@ -42,7 +43,19 @@ public class UserController  extends AbstractController{
     getAllUsers (@PathVariable Integer start, @PathVariable Integer end){
         IResponse<List<User>> resp = () -> userControllerService.getAllLimit(start, end);
         Log.i("getting limited Users");
-        return generateBodyResponse(resp, Mapping.APITags.UserAPITag, Mapping.APIActions.getUsers);
+        return generateBodyResponse(resp, Mapping.APITags.UserAPITag, Mapping.APIActions.getUser);
+    }
+
+    @RequestMapping (value = Mapping.FindByParam, method = RequestMethod.GET)
+    public @ResponseBody
+    WebModel<User>
+    getUserByLoginPassword (
+            HttpServletResponse httpResponse,
+            @RequestParam(value = "Login", required = true) String login,
+            @RequestParam(value = "Password", required = true) String password) {
+        IResponse<ServiceModel<User>> resp = () -> userControllerService.getUserByLoginPassword(login, password);
+        Log.i("getting user by login & password");
+        return generateWebResponse(resp, Mapping.APITags.UserAPITag, Mapping.APIActions.getUser, httpResponse);
     }
 
     @RequestMapping (value = Mapping.FindById, method = RequestMethod.GET)
@@ -51,7 +64,7 @@ public class UserController  extends AbstractController{
     WebModel<User>
     getUserById (@PathVariable Integer id) {
         IResponse<User> resp = () -> userControllerService.get(id);
-        return generateBodyResponse(resp, Mapping.APITags.UserAPITag, Mapping.APIActions.getUsers);
+        return generateBodyResponse(resp, Mapping.APITags.UserAPITag, Mapping.APIActions.getUser);
     }
 
     @RequestMapping (value =  Mapping.GetAll, method = RequestMethod.GET)
@@ -61,7 +74,7 @@ public class UserController  extends AbstractController{
     getAllUsers () {
         IResponse<List<User>> resp = userControllerService::getAll;
         Log.i("getting all Users");
-        return generateBodyResponse(resp, Mapping.APITags.UserAPITag, Mapping.APIActions.getUsers);
+        return generateBodyResponse(resp, Mapping.APITags.UserAPITag, Mapping.APIActions.getUser);
     }
 
     @RequestMapping (value =  Mapping.UpdateById , method = RequestMethod.PUT)
@@ -102,27 +115,31 @@ public class UserController  extends AbstractController{
 
     @RequestMapping (value = Mapping.Insert, method = RequestMethod.POST)
     public @ResponseBody
-    @ResponseStatus(value = HttpStatus.CREATED)
     WebModel<Integer>
     insertUser (@RequestParam(value = "Name", required = false) String name,
                 @RequestParam(value = "LastName", required = false) String lastname,
                 @RequestParam(value = "IdType", required = false) Integer idType,
                 @RequestParam(value = "Date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date dateCreated,
                 @RequestParam(value = "FileName", required = false) String fileName,
-                HttpServletRequest request) throws IOException {
+                @RequestParam(value = "Login", required = true) String login,
+                @RequestParam(value = "Password", required = true) String password,
+                HttpServletRequest httpRequest,
+                HttpServletResponse httpResponse)throws IOException {
 
         HashMap<String,Object> sqlParams = new HashMap<>(8);
+        sqlParams.put(UserTable.Columns.Login.getName(), login);
+        sqlParams.put(UserTable.Columns.Password.getName(), password);
         if (name != null) sqlParams.put(UserTable.Columns.Name.getName(), name);
         if (lastname != null) sqlParams.put(UserTable.Columns.LastName.getName(), lastname);
         if (idType != null) sqlParams.put(UserTable.Columns.IdType.getName(), idType);
         if (dateCreated != null) sqlParams.put(UserTable.Columns.DateCreated.getName(), dateCreated);
         if (fileName != null) sqlParams.put(UserTable.Columns.FileName.getName(), fileName);
-        byte[] binaryContent = DBUtils.ConvertInputStream(request.getInputStream());
+        byte[] binaryContent = DBUtils.ConvertInputStream(httpRequest.getInputStream());
         if (binaryContent.length > 0) sqlParams.put(UserTable.Columns.BinaryContent.getName(), binaryContent);
 
-        IResponse<Integer> resp = () -> userControllerService.insert(sqlParams);
+        IResponse<ServiceModel<Integer>> resp = () -> userControllerService.insertUser(login, password, sqlParams);
         Log.i("inserting User");
-        return generateBodyResponse(resp, Mapping.APITags.UserAPITag, Mapping.APIActions.insertUser);
+        return generateWebResponse(resp, Mapping.APITags.UserAPITag, Mapping.APIActions.insertUser, httpResponse);
     }
 
     @RequestMapping (value =  Mapping.DownloadImage, method = RequestMethod.GET)

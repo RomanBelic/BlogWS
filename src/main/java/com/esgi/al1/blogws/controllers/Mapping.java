@@ -11,6 +11,7 @@ class Mapping {
 
     public static final String GetAll ="/GetAll";
     public static final String FindById ="/Get/{id}";
+    public static final String FindByParam ="/Get";
     public static final String UpdateById ="/Update/{id}";
     public static final String DeleteById = "/Delete/{id}";
     public static final String Insert = "/Insert";
@@ -28,14 +29,14 @@ class Mapping {
     }
 
     public static class APIActions {
-        public static final String getPosts = "getPost";
+        public static final String getPost = "getPost";
         public static final String updatePost = "updatePost";
         public static final String insertPost = "insertPost";
         public static final String deletePost = "deletePost";
 
         public static final String downloadImage = "downloadImage";
 
-        public static final String getUsers = "getUser";
+        public static final String getUser = "getUser";
         public static final String updateUser = "updateUser";
         public static final String insertUser = "insertUser";
         public static final String deleteUser = "deleteUser";

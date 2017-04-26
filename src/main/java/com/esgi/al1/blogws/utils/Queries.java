@@ -25,6 +25,7 @@ public class Queries {
     public final String InsertUser;
     public final String GetAllUsersLimit;
     public final String GetUser;
+    public final String GetUserByLoginPassword;
 
     @Autowired
     public Queries (DataBase dataBase){
@@ -49,7 +50,7 @@ public class Queries {
                 buildDatabase(dataBase.getName()).
                 buildTable(dataBase.getPostTable().getName()).
                 buildWhere(WherePostId).build();
-        this.GetAllPostsLimit = GetAllPosts.concat(" LIMIT ?,?");
+        this.GetAllPostsLimit = this.GetAllPosts.concat(" LIMIT ?,?");
 
         this.WhereUserId = (" WHERE ").concat(UserTable.Columns.Id.getName()).concat("=?");
         this.GetAllUsers = new QueryBuilder().buildCommand("SELECT * FROM").
@@ -72,7 +73,11 @@ public class Queries {
                 buildDatabase(dataBase.getName()).
                 buildTable(dataBase.getUserTable().getName()).
                 buildWhere(WhereUserId).build();
-        this.GetAllUsersLimit = GetAllUsers.concat(" LIMIT ?,?");
+        this.GetAllUsersLimit = this.GetAllUsers.concat(" LIMIT ?,?");
+        this.GetUserByLoginPassword = new QueryBuilder().buildCommand("SELECT * FROM").
+                buildDatabase(dataBase.getName()).
+                buildTable(dataBase.getUserTable().getName()).
+                buildWhere("WHERE Login=? AND Password=?").build();
     }
 
 }

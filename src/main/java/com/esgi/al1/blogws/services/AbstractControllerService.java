@@ -6,9 +6,11 @@ import com.esgi.al1.blogws.interfaces.QueryGenerators.IGenerateDeleteQuery;
 import com.esgi.al1.blogws.interfaces.QueryGenerators.IGenerateInsertQuery;
 import com.esgi.al1.blogws.interfaces.QueryGenerators.IGenerateSelectQuery;
 import com.esgi.al1.blogws.interfaces.QueryGenerators.IGenerateUpdateQuery;
+import com.esgi.al1.blogws.models.ServiceModel;
 import com.esgi.al1.blogws.utils.GeneratedQuery;
 import com.esgi.al1.blogws.utils.Log;
 import com.esgi.al1.blogws.utils.Queries;
+import com.esgi.al1.blogws.utils.ServiceModelBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,6 +56,12 @@ public abstract class AbstractControllerService<T> {
         this.queries = queries;
     }
 
+    protected <T> ServiceModel<T> generateServiceResponse (T content, int httpStatus){
+        return new ServiceModelBuilder<T>().
+                buildContent(content).
+                buildHttpCode(httpStatus).
+                build();
+    }
 
     public List<T> getAll() {
         List<T> result = null;
